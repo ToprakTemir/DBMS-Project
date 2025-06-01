@@ -3,17 +3,49 @@
 import os
 import sys
 
-def parse_command(input_line):
+def process_command(input_line):
     """
     Parse a command line input and return the command and its arguments.
     """
-    pass
+    input_line = input_line.strip().split()
+    command_type = " ".join(input_line[:2]) # first two words define the command type
+    args = input_line[2:] # remaining words are arguments
+
+    if command_type == "create table":
+        if len(args) < 4:
+            print("Error: 'create table' command requires at least 4 arguments.")
+            return
+
+        table_name = args[0]
+        field_count = args[1]
+        pk_idx = args[2] - 1 # arguments are 1-indexed, convert to 0-indexed
+        field_names = args[3:]
+
+        if len(field_names) < field_count:
+            print(f"Error: Expected {field_count} field names, but got {len(field_names)}.")
+            return
+
+        # TODO: call the function to create a table with the given parameters
+
+    elif command_type == "create record":
+        table_name = args[0]
+        # TODO: validate that the table exists, get the number of fields
+        num_fields = 3 # will be taken from the table schema
+        if len(args) != num_fields + 1:
+            print(f"Error: 'create record {table_name}' command requires {num_fields} field values.")
+            return
+
+    elif command_type == "delete record":
+        pass
+    elif command_type == "search record":
+        pass
+
 
 
 def main(input_file_path):
     input_file = open(input_file_path, 'r')
     for line in input_file:
-        parse_command(line)
+        process_command(line)
 
 if __name__ == "__main__":
 
