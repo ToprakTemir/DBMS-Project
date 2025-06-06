@@ -5,6 +5,9 @@ import time
 def log_message(message: str, success: bool) -> None:
     """
     Log a message to the log file.
+    For incomplete commands, the success parameter should be None. When the command is completed and the message is
+    logged again with a definite status, the logs will be updated accordingly.
+
     :param message: The message to log.
     """
 
