@@ -55,7 +55,7 @@ class Table:
         with open(file_path, 'wb') as f:
             f.write(bytearray(32))
 
-        # TODO: log the new table creation to log.csv and catalog.json
+        # TODO: log the new table creation to log.csv
 
 
     def encode_record(self):

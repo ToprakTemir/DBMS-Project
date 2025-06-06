@@ -5,6 +5,7 @@ from typing import Optional
 # Path definitions
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 DISK_PATH = os.path.join(PROJECT_ROOT, 'disk')
+LOG_DISK_PATH = os.path.join(PROJECT_ROOT, 'log_disk')
 
 def load_catalog_entry(table_name: str) -> Optional[dict]:
     """
@@ -27,12 +28,12 @@ def save_catalog_entry(table_name: str, entry: dict) -> None:
     catalog_path = os.path.join(DISK_PATH, 'catalog.json')
 
     if os.path.exists(catalog_path):
-        with open(catalog_path, 'r') as f:
-            catalog = json.load(f)
+        with open(catalog_path, 'r') as catalog_file:
+            catalog = json.load(catalog_file)
     else:
         catalog = {}
 
     catalog[table_name] = entry
 
-    with open(catalog_path, 'w') as f:
-        json.dump(catalog, f, indent=4)
+    with open(catalog_path, 'w') as catalog_file:
+        json.dump(catalog, catalog_file, indent=4)
