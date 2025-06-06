@@ -19,7 +19,22 @@ def log_message(message: str, success: bool) -> None:
 
     # Append the log entry
     with open(log_file_path, 'a') as f:
-        status = "success" if success else "failure"
         unix_time = int(time.time())
+        if success is None: # the log is from the request of command, success is not known yet
+            status = "incomplete"
+            log = f"{unix_time}, {message}, {status}\n"
+            f.write(log)
+            return
+
+        # if success is Not None, then last line was likely the incomplete command of the same message
+
+        # delete last line if it was the same command and incomplete
+        last_command = f.readlines()[-1] if os.path.getsize(log_file_path) > 0 else ""
+        if last_command.strip().split(",")[2] == "incomplete" and last_command.strip().split(",")[1] == message:
+            f.seek(0, os.SEEK_END)
+            f.seek(f.tell() - len(last_command))
+            f.truncate()
+
+        status = "success" if success else "failure"
         log = f"{unix_time}, {message}, {status}\n"
         f.write(log)
