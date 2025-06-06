@@ -1,0 +1,38 @@
+import json
+import os
+from typing import Optional
+
+# Path definitions
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+DISK_PATH = os.path.join(PROJECT_ROOT, 'disk')
+
+def load_catalog_entry(table_name: str) -> Optional[dict]:
+    """
+    Load the catalog entry for a given table name.
+    :param table_name: Name of the table to load.
+    :return: Dictionary containing the catalog entry or None if not found.
+    """
+
+    catalog_path = os.path.join(DISK_PATH, table_name)
+    if not os.path.exists(catalog_path):
+        print(f"Catalog file does not exist at {os.path.join(DISK_PATH, 'catalog.json')}.")
+        return None
+
+    with open(catalog_path, 'r') as f:
+        catalog = json.load(f)
+
+    return catalog.get(table_name, None)
+
+def save_catalog_entry(table_name: str, entry: dict) -> None:
+    catalog_path = os.path.join(DISK_PATH, 'catalog.json')
+
+    if os.path.exists(catalog_path):
+        with open(catalog_path, 'r') as f:
+            catalog = json.load(f)
+    else:
+        catalog = {}
+
+    catalog[table_name] = entry
+
+    with open(catalog_path, 'w') as f:
+        json.dump(catalog, f, indent=4)

@@ -2,6 +2,8 @@
 
 import os
 import sys
+from DBMS.Table import Table
+
 
 def process_command(input_line):
     """
@@ -13,19 +15,17 @@ def process_command(input_line):
 
     if command_type == "create table":
         if len(args) < 4:
-            print("Error: 'create table' command requires at least 4 arguments.")
-            return
+            raise ValueError("Error: 'create table' command requires at least 4 arguments.")
 
         table_name = args[0]
         field_count = args[1]
         pk_idx = args[2] - 1 # arguments are 1-indexed, convert to 0-indexed
         field_names = args[3:]
 
-        if len(field_names) < field_count:
-            print(f"Error: Expected {field_count} field names, but got {len(field_names)}.")
-            return
+        if len(field_names) != field_count:
+            raise ValueError(f"Expected {field_count} field names, but got {len(field_names)}.")
 
-        # TODO: call the function to create a table with the given parameters
+        new_table = Table(table_name, new_table_args=(field_count, pk_idx, field_names))
 
     elif command_type == "create record":
         table_name = args[0]
@@ -48,7 +48,6 @@ def main(input_file_path):
         process_command(line)
 
 if __name__ == "__main__":
-
     if len(sys.argv) < 2:
         print("Usage: python archive.py <full_input_file_path>")
         exit(1)
