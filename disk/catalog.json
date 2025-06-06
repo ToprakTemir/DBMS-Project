@@ -1,0 +1,16 @@
+{
+    "house": {
+        "file_count": 1,
+        "field_count": 6,
+        "pk_idx": 0,
+        "fields": {
+            "name": "str",
+            "origin": "str",
+            "leader": "str",
+            "military_strength": "int",
+            "wealth": "int",
+            "spice_production": "int"
+        },
+        "page_size": 780
+    }
+}

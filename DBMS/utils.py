@@ -3,7 +3,7 @@ import os
 from typing import Optional
 
 # Path definitions
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 DISK_PATH = os.path.join(PROJECT_ROOT, 'disk')
 LOG_DISK_PATH = os.path.join(PROJECT_ROOT, 'log_disk')
 
@@ -14,7 +14,7 @@ def load_catalog_entry(table_name: str) -> Optional[dict]:
     :return: Dictionary containing the catalog entry or None if not found.
     """
 
-    catalog_path = os.path.join(DISK_PATH, table_name)
+    catalog_path = os.path.join(DISK_PATH, 'catalog.json')
     if not os.path.exists(catalog_path):
         print(f"Catalog file does not exist at {os.path.join(DISK_PATH, 'catalog.json')}.")
         return None
