@@ -78,13 +78,23 @@ class Table:
         save_catalog_entry(catalog_key, catalog_entry)
 
         file_path = os.path.join(DISK_PATH, f"{self.table_name}_1.bat")
-        if os.path.exists(file_path):
-            raise FileExistsError(f"No entry for table '{self.table_name}' exists in catalog, but file '{file_path}' already exists.")
+        self.allocate_file(file_path)
 
-        # write file header
-        # file header contains a bitmap of 256 bits, each bit representing a page
+    def allocate_file(self, file_path: str) -> None:
+        """
+        Write a bytearray as large as the maximum file size to the file to avoid accessing unwritten space later.
+        :param file_path: The path to the file to be allocated.
+        :raises FileExistsError: If the file already exists.
+        """
         with open(file_path, 'wb') as f:
-            f.write(bytearray(32))
+            # Write 32-byte file header (256 bits = 256 pages)
+            f.write(bytearray(self.FILE_HEADER_SIZE))
+
+            # Write empty pages: each page has 1-byte page bitmap + 8 empty records
+            for _ in range(self.PAGES_PER_FILE):
+                # 1 byte for page header + self.PAGE_SLOTS empty records
+                f.write(bytearray(self.PAGE_HEADER_SIZE + self.PAGE_SLOTS * self.entry_size))
+
 
     def add_record(self, field_values: Tuple[str|int]) -> None:
         """
@@ -106,7 +116,7 @@ class Table:
         file_path, page_number = self.search_unfilled_page()
         with open(file_path, 'r+b') as f:
             # seek to the unfilled page
-            f.seek(self.PAGE_HEADER_SIZE + page_number * self.page_size)
+            f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size)
 
             page_header = f.read(self.PAGE_HEADER_SIZE)
             page_bitmap = int.from_bytes(page_header, 'big')
@@ -125,6 +135,18 @@ class Table:
             # encode the record and write it to the slot
             entry_encoded = self.encode_record(field_values)
             f.write(entry_encoded)
+
+            # write the updated page header
+            f.seek(page_number * self.page_size)
+            f.write(page_bitmap.to_bytes(self.PAGE_HEADER_SIZE, 'big'))
+
+            # update the file header to mark the page as nonempty
+            f.seek(0)
+            file_header = f.read(self.FILE_HEADER_SIZE)
+            file_bitmap = int.from_bytes(file_header, 'big')
+            file_bitmap |= (1 << page_number)
+            f.seek(0)
+            f.write(file_bitmap.to_bytes(self.FILE_HEADER_SIZE, 'big'))
 
 
     def search_unfilled_page(self) -> Tuple[str, int]:
@@ -154,8 +176,8 @@ class Table:
         new_file_index = len(self.files) + 1
         new_file_name = f"{self.table_name}_{new_file_index}.bat"
         new_file_path = os.path.join(DISK_PATH, new_file_name)
-        with open(new_file_path, 'wb') as f:
-            f.write(bytearray(self.FILE_HEADER_SIZE))
+        self.allocate_file(new_file_path)
+
         self.files.append(new_file_name)
         self.catalog_entry["file_count"] += 1
         save_catalog_entry(self.table_name, self.catalog_entry) # overwrite the catalog entry
