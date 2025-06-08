@@ -14,7 +14,6 @@ class Table:
         :param new_table_args: Arguments required for creating a new table.
         """
 
-
         # constants
         self.PAGE_SLOTS = 8
         self.PAGES_PER_FILE = 256
@@ -49,6 +48,7 @@ class Table:
 
         # files this table is stored in, (always named <table_name>_<file_index>.bat), sorted by file index
         self.files = [f for f in os.listdir(DISK_PATH) if f.startswith(self.table_name) and f.endswith('.bat')].sort(key=lambda x: int(x.split('_')[-1].split('.')[0]))
+        self.files = [os.path.join(DISK_PATH, f) for f in self.files]  # convert to full paths
 
     def _create_table(self, args: Tuple[int, int, Dict[str, str]]):
         field_count, pk_idx, fields = args
@@ -85,7 +85,7 @@ class Table:
         with open(file_path, 'wb') as f:
             f.write(bytearray(32))
 
-    def add_record(self, field_values: List[str]) -> None:
+    def add_record(self, field_values: Tuple[str|int]) -> None:
         """
         Add a new record to the table.
         :param field_values: List of field values to be added as a new record.
@@ -102,15 +102,36 @@ class Table:
             raise KeyConstraintViolation(f"Primary key constraint violated: {pk_value} already exists in the table.")
 
         # add the record to first available page of first available file
-        # TODO: complete
+        file_path, page_number = self.search_unfilled_page()
+        with open(file_path, 'r+b') as f:
+            # seek to the unfilled page
+            f.seek(self.PAGE_HEADER_SIZE + page_number * self.page_size)
+
+            page_header = f.read(self.PAGE_HEADER_SIZE)
+            page_bitmap = int.from_bytes(page_header, 'big')
+
+            # find the first available slot in the page
+            slot_idx = 0
+            while page_bitmap % (1 << slot_idx) != 0 and slot_idx < self.PAGE_SLOTS:
+                slot_idx += 1
+            if slot_idx >= self.PAGE_SLOTS: # sanity check
+                raise ValueError(f"No available slots in page {page_number} of file {file_path}, even though it is returned as an unfilled page from search_unfilled_page() function.")
+
+            # update the page bitmap to mark the slot as filled
+            page_bitmap |= (1 << slot_idx)
+            f.read(self.entry_size * slot_idx)  # skip to the slot
+
+            # encode the record and write it to the slot
+            entry_encoded = self.encode_record(field_values)
+            f.write(entry_encoded)
+
 
     def search_unfilled_page(self) -> Tuple[str, int]:
         """
         Search for the first unfilled page in the table.
         :return: A tuple containing the file name and page number of the first unfilled page.
         """
-        for file_name in self.files:
-            file_path = os.path.join(DISK_PATH, file_name)
+        for file_path in self.files:
             with open(file_path, 'rb') as f:
                 # read the file header
                 f.seek(0)
@@ -119,13 +140,13 @@ class Table:
 
                 for page_number in range(self.PAGES_PER_FILE):
                     if not file_bitmap & (1 << page_number):
-                        return file_name, page_number
+                        return file_path, page_number
 
                     f.seek(page_number * self.page_size)
                     page_header = f.read(self.PAGE_HEADER_SIZE)
                     page_bitmap = int.from_bytes(page_header, 'big')
                     if page_bitmap != (1 << self.PAGE_SLOTS) - 1:
-                        return file_name, page_number
+                        return file_path, page_number
 
         # if no unfilled page found, all entries in all pages are filled
         # create a new file and return the first page of that file
@@ -146,8 +167,7 @@ class Table:
         :param key: The primary key value to search for.
         :return: The record if found, None otherwise.
         """
-        for file_name in self.files:
-            file_path = os.path.join(DISK_PATH, file_name)
+        for file_path in self.files:
             with open(file_path, 'rb') as f:
                 # read the file header
                 f.seek(0)
@@ -196,3 +216,6 @@ class Table:
             else:
                 raise ValueError(f"Unsupported field type '{field_type}'.")
         return record
+
+    def delete_record(self, pk_value: str) -> None:
+        raise NotImplementedError()
