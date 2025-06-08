@@ -60,6 +60,8 @@ def process_command(input_line):
             raise ValueError(f"Error: Table '{table_name}' does not exist. Please create it first.")
 
         field_count = table_entry["field_count"]
+        if len(field_values) != field_count:
+            raise ValueError(f"Error: Expected {field_count} field values, but got {len(field_values)}.")
 
         # create a new record in the table
         table = Table(table_name)

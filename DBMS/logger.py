@@ -18,6 +18,7 @@ def log_command(message: str, status: LogStatus) -> None:
     :param message: The message to log.
     """
 
+    message = message.strip()
     log_file_path = os.path.join(LOG_DISK_PATH, 'log.csv')
 
     # Ensure the log directory exists

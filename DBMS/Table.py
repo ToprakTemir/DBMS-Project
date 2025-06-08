@@ -28,6 +28,7 @@ class Table:
         self.FILE_HEADER_SIZE = 32 # 32 bytes for page bitmap of 256 bits
 
         # check if the table entry exists in the catalog
+        self.table_name = table_name
         self.catalog_entry = load_catalog_entry(table_name)
 
         # create the table and catalog entry if it does not exist
@@ -38,7 +39,6 @@ class Table:
                 self._create_table(new_table_args)
                 self.catalog_entry = load_catalog_entry(table_name)
 
-        self.table_name = table_name
         self.field_count = self.catalog_entry["field_count"]
         self.pk_idx = self.catalog_entry["pk_idx"]
         self.fields = self.catalog_entry["fields"]
@@ -47,7 +47,8 @@ class Table:
         self.file_count = self.catalog_entry["file_count"]
 
         # files this table is stored in, (always named <table_name>_<file_index>.bat), sorted by file index
-        self.files = [f for f in os.listdir(DISK_PATH) if f.startswith(self.table_name) and f.endswith('.bat')].sort(key=lambda x: int(x.split('_')[-1].split('.')[0]))
+        self.files = [f for f in os.listdir(DISK_PATH) if f.startswith(self.table_name) and f.endswith('.bat')]
+        self.files.sort(key=lambda x: int(x.split('_')[-1].split('.')[0]))
         self.files = [os.path.join(DISK_PATH, f) for f in self.files]  # convert to full paths
 
     def _create_table(self, args: Tuple[int, int, Dict[str, str]]):
@@ -195,8 +196,28 @@ class Table:
                             return entry
 
 
-    def encode_record(self):
-        raise NotImplementedError()
+    def encode_record(self, field_values: Tuple[str|int]) -> bytes:
+        """
+        Encode a record from a tuple of field values to bytes.
+        :param field_values: A tuple containing the field values to be encoded.
+        :return: Bytes representation of the record.
+        """
+        if len(field_values) != self.field_count:
+            raise ValueError(f"Expected {self.field_count} field values, but got {len(field_values)}.")
+
+        entry = bytearray()
+        i = 0
+        for _, field_type in self.fields.items():
+            if field_type == "int":
+                entry.extend(int(field_values[i]).to_bytes(4, 'big'))
+                i += 1
+            elif field_type == "str":
+                field_value = str(field_values[i]).encode('utf-8')
+                if len(field_value) > 256:
+                    raise ValueError(f"String value '{field_value}' exceeds maximum length of 256 characters.")
+                entry.extend(field_value.ljust(256, b'\x00'))
+                i += 1
+        return entry
 
     def decode(self, entry: bytes) -> Dict[str, str|int]:
         """
