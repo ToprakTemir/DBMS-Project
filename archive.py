@@ -1,7 +1,7 @@
 import os
 import sys
 from DBMS.Table import Table
-from DBMS.logger import log_command
+from DBMS.logger import log_command, LogStatus
 from DBMS.utils import load_catalog_entry, save_catalog_entry, DISK_PATH
 from DBMS.exceptions import KeyConstraintViolation
 
@@ -10,11 +10,16 @@ def print_output(message: str) -> None:
     with open(output_file_path, 'a') as output_file:
         output_file.write(message + '\n')
 
+DEBUG_MODE = True
+def print_stdout(message: str) -> None:
+    if DEBUG_MODE:
+        print(message)
+
 def process_command(input_line):
     """
     Parse a command line input and return the command and its arguments.
     """
-    log_command(input_line, None) # Log the command as incomplete
+    log_command(input_line, LogStatus.BEGIN) # Log the command as incomplete
     input_line_list = input_line.strip().split()
     command_type = " ".join(input_line_list[:2]) # first two words define the command type
     args = input_line_list[2:] # remaining words are arguments
@@ -37,11 +42,12 @@ def process_command(input_line):
             fields_dict[fields[i]] = fields[i + 1]  # field name and type
             i += 2
 
-        Table(table_name, new_table_args=(field_count, pk_idx, fields_dict))
-        log_command(input_line, True)  # Log the command as successful when this line is executed without raising an error
-
-    elif command_type == "search record":
-        pass
+        try:
+            Table(table_name, new_table_args=(field_count, pk_idx, fields_dict))
+            log_command(input_line, LogStatus.SUCCESS)
+        except ValueError as e:
+            print_stdout(f"Error: {e}")
+            log_command(input_line, LogStatus.FAILURE)
 
     elif command_type == "create record":
         field_values = args[1:]  # all arguments after the table name are field values
@@ -59,11 +65,13 @@ def process_command(input_line):
         table = Table(table_name)
         try:
             table.add_record(field_values)
-            log_command(input_line, True)
+            log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
         except KeyConstraintViolation as e:
-            print(f"Error: {e}")
-            log_command(input_line, False)
+            print_stdout(f"Error: {e}")
+            log_command(input_line, LogStatus.FAILURE)
 
+    elif command_type == "search record":
+        pass
 
     elif command_type == "delete record":
         pass
@@ -77,12 +85,12 @@ def main(input_file_path):
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: python archive.py <full_input_file_path>")
+        print_stdout("Usage: python archive.py <full_input_file_path>")
         exit(1)
 
     input_file_path = sys.argv[1]
     if not os.path.isfile(input_file_path):
-        print(f"File {input_file_path} does not exist.")
+        print_stdout(f"File {input_file_path} does not exist.")
         exit(1)
 
     main(input_file_path)
