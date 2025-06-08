@@ -16,7 +16,6 @@ def load_catalog_entry(table_name: str) -> Optional[dict]:
 
     catalog_path = os.path.join(DISK_PATH, 'catalog.json')
     if not os.path.exists(catalog_path):
-        print(f"Catalog file does not exist at {os.path.join(DISK_PATH, 'catalog.json')}.")
         return None
 
     with open(catalog_path, 'r') as f:
