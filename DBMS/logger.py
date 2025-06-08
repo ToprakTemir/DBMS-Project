@@ -14,7 +14,7 @@ def log_command(message: str, status: LogStatus) -> None:
     For incomplete commands, the success parameter should be None. When the command is completed and the message is
     logged again with a definite status, the logs will be updated accordingly.
 
-    :param status: whether the log is for a
+    :param status: whether the log is for an unfinished command (BEGIN), a successful command (SUCCESS), or a failed command (FAILURE).
     :param message: The message to log.
     """
 
