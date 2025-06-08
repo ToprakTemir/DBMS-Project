@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Optional
 from DBMS.utils import load_catalog_entry, save_catalog_entry
 from DBMS.utils import DISK_PATH
 from DBMS.exceptions import KeyConstraintViolation
@@ -14,17 +14,21 @@ class Table:
         :param new_table_args: Arguments required for creating a new table.
         """
 
+
         # constants
         self.PAGE_SLOTS = 8
         self.PAGES_PER_FILE = 256
+        self.MAX_TABLE_NAME_LENGTH_ALLOWED = 12
+        self.MAX_FIELD_NAME_LENGTH_ALLOWED = 20
 
-        # Page Structure: [ page number | bitmap | record 0 | record 1 | ... | record 7 ]
-        self.PAGE_HEADER_SIZE = 1 + 1 # 1 byte for page number, 1 byte for bitmap of 8 bits
-        self.FILE_HEADER_SIZE = 32 # 256 bits for page bitmap, equal to 32 bytes
+        if len(table_name) > self.MAX_TABLE_NAME_LENGTH_ALLOWED:
+            raise ValueError(f"Table name '{table_name}' exceeds maximum length of {self.MAX_TABLE_NAME_LENGTH_ALLOWED} characters.")
 
-        self.table_name = table_name
+        # Page Structure: [ bitmap | record 0 | record 1 | ... | record 7 ]
+        self.PAGE_HEADER_SIZE = 1 # 1 byte for bitmap of 8 bits
+        self.FILE_HEADER_SIZE = 32 # 32 bytes for page bitmap of 256 bits
 
-        # first check if the table entry exists in the catalog
+        # check if the table entry exists in the catalog
         self.catalog_entry = load_catalog_entry(table_name)
 
         # create the table and catalog entry if it does not exist
@@ -35,23 +39,31 @@ class Table:
                 self._create_table(new_table_args)
                 self.catalog_entry = load_catalog_entry(table_name)
 
+        self.table_name = table_name
         self.field_count = self.catalog_entry["field_count"]
         self.pk_idx = self.catalog_entry["pk_idx"]
         self.fields = self.catalog_entry["fields"]
+        self.entry_size = self.catalog_entry["entry_size"]
         self.page_size = self.catalog_entry["page_size"]
         self.file_count = self.catalog_entry["file_count"]
-        self.file_path = os.path.join(DISK_PATH, f"{self.table_name}_1.bat")
 
+        # files this table is stored in, (always named <table_name>_<file_index>.bat), sorted by file index
+        self.files = [f for f in os.listdir(DISK_PATH) if f.startswith(self.table_name) and f.endswith('.bat')].sort(key=lambda x: int(x.split('_')[-1].split('.')[0]))
 
     def _create_table(self, args: Tuple[int, int, Dict[str, str]]):
         field_count, pk_idx, fields = args
 
-        page_size = 0
+        entry_size = 0
         for field_name, field_type in fields.items():
+            if len(field_type) > self.MAX_FIELD_NAME_LENGTH_ALLOWED:
+                raise ValueError(f"Field type '{field_type}' for field '{field_name}' exceeds maximum length of {self.MAX_FIELD_NAME_LENGTH_ALLOWED} characters.")
             if field_type == "int":
-                page_size += 4 # bytes
-            if field_type == "str":
-                page_size += 256 # bytes, assuming max length of string is 256 characters
+                entry_size += 4 # bytes
+            elif field_type == "str":
+                entry_size += 256 # bytes, assuming max length of string is 256 characters
+            else:
+                raise ValueError(f"Unsupported field type '{field_type}'.")
+        page_size = entry_size * self.PAGE_SLOTS + self.PAGE_HEADER_SIZE
 
         catalog_key = self.table_name
         catalog_entry = {
@@ -59,7 +71,8 @@ class Table:
             "field_count": field_count,
             "pk_idx": pk_idx,
             "fields": fields,
-            "page_size": page_size
+            "entry_size": entry_size,
+            "page_size": page_size,
         }
         save_catalog_entry(catalog_key, catalog_entry)
 
@@ -89,9 +102,97 @@ class Table:
             raise KeyConstraintViolation(f"Primary key constraint violated: {pk_value} already exists in the table.")
 
         # add the record to first available page of first available file
+        # TODO: complete
+
+    def search_unfilled_page(self) -> Tuple[str, int]:
+        """
+        Search for the first unfilled page in the table.
+        :return: A tuple containing the file name and page number of the first unfilled page.
+        """
+        for file_name in self.files:
+            file_path = os.path.join(DISK_PATH, file_name)
+            with open(file_path, 'rb') as f:
+                # read the file header
+                f.seek(0)
+                file_header = f.read(self.FILE_HEADER_SIZE)
+                file_bitmap = int.from_bytes(file_header, 'big')
+
+                for page_number in range(self.PAGES_PER_FILE):
+                    if not file_bitmap & (1 << page_number):
+                        return file_name, page_number
+
+                    f.seek(page_number * self.page_size)
+                    page_header = f.read(self.PAGE_HEADER_SIZE)
+                    page_bitmap = int.from_bytes(page_header, 'big')
+                    if page_bitmap != (1 << self.PAGE_SLOTS) - 1:
+                        return file_name, page_number
+
+        # if no unfilled page found, all entries in all pages are filled
+        # create a new file and return the first page of that file
+        new_file_index = len(self.files) + 1
+        new_file_name = f"{self.table_name}_{new_file_index}.bat"
+        new_file_path = os.path.join(DISK_PATH, new_file_name)
+        with open(new_file_path, 'wb') as f:
+            f.write(bytearray(self.FILE_HEADER_SIZE))
+        self.files.append(new_file_name)
+        self.catalog_entry["file_count"] += 1
+        save_catalog_entry(self.table_name, self.catalog_entry) # overwrite the catalog entry
+        return new_file_name, 0
+
+
+    def search_record(self, key: str | int) -> Optional[Dict[str, str|int]]:
+        """
+        Search for a record in the table by the primary key.
+        :param key: The primary key value to search for.
+        :return: The record if found, None otherwise.
+        """
+        for file_name in self.files:
+            file_path = os.path.join(DISK_PATH, file_name)
+            with open(file_path, 'rb') as f:
+                # read the file header
+                f.seek(0)
+                file_header = f.read(self.FILE_HEADER_SIZE)
+                file_bitmap = int.from_bytes(file_header, 'big')
+
+                for page_number in range(self.PAGES_PER_FILE):
+                    if not file_bitmap & (1 << page_number):
+                        continue
+
+                    f.seek(page_number * self.page_size)
+                    page_header = f.read(self.PAGE_HEADER_SIZE)
+                    page_bitmap = int.from_bytes(page_header, 'big')
+
+                    entries = []
+                    for slot in range(self.PAGE_SLOTS):
+                        if not page_bitmap & (1 << slot):
+                            continue
+                        entry_encoded = f.read(self.entry_size)
+                        entry = self.decode(entry_encoded)
+                        entries.append(entry)
+
+                    for entry in entries:
+                        if entry.get(self.pk_idx) == key:
+                            return entry
+
 
     def encode_record(self):
         raise NotImplementedError()
 
-    def decode_record(self):
-        raise NotImplementedError()
+    def decode(self, entry: bytes) -> Dict[str, str|int]:
+        """
+        Decode a record from bytes to a dictionary.
+        :param entry: The bytes representation of the record.
+        :return: A dictionary with field names as keys and field values as values.
+        """
+        record = {}
+        offset = 0
+        for field_name, field_type in self.fields.items():
+            if field_type == "int":
+                record[field_name] = int.from_bytes(entry[offset:offset + 4], 'big')
+                offset += 4
+            elif field_type == "str":
+                record[field_name] = entry[offset:offset + 256].decode('utf-8').strip('\x00')
+                offset += 256
+            else:
+                raise ValueError(f"Unsupported field type '{field_type}'.")
+        return record
