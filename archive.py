@@ -25,6 +25,7 @@ def process_command(input_line):
     args = input_line_list[2:] # remaining words are arguments
     table_name = args[0]
 
+    # CREATE COMMAND
     if command_type == "create type":
         if len(args) < 4:
             raise ValueError("Error: 'create table' command requires at least 4 arguments.")
@@ -48,23 +49,23 @@ def process_command(input_line):
         except ValueError as e:
             print_stdout(f"Error: {e}")
             log_command(input_line, LogStatus.FAILURE)
+        finally:
+            return
 
-    elif command_type == "create record":
+    # ALL OTHER COMMANDS, GET TABLE SCHEMA FIRST
+    table_entry = load_catalog_entry(table_name)
+    if not load_catalog_entry(table_name):
+        raise ValueError(f"Error: Table '{table_name}' does not exist. Please create it first.")
+    table = Table(table_name)
+
+    if command_type == "create record":
         field_values = args[1:]  # all arguments after the table name are field values
-
-        # get the table schema from the catalog
-        table_entry = load_catalog_entry(table_name)
-
-        # input validation
-        if not load_catalog_entry(table_name):
-            raise ValueError(f"Error: Table '{table_name}' does not exist. Please create it first.")
 
         field_count = table_entry["field_count"]
         if len(field_values) != field_count:
             raise ValueError(f"Error: Expected {field_count} field values, but got {len(field_values)}.")
 
         # create a new record in the table
-        table = Table(table_name)
         try:
             table.add_record(field_values)
             log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
@@ -73,7 +74,15 @@ def process_command(input_line):
             log_command(input_line, LogStatus.FAILURE)
 
     elif command_type == "search record":
-        pass
+        searched_value = args[1]
+        found_record = table.search_record(searched_value)
+        log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
+
+        if not found_record is None:
+            output_str = ""
+            for _, value in found_record.items():
+                output_str += f"{value} "
+            print_output(output_str)
 
     elif command_type == "delete record":
         pass
