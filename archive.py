@@ -75,17 +75,19 @@ def process_command(input_line):
 
     elif command_type == "search record":
         searched_value = args[1]
-        found_record = table.search_record(searched_value)
+        search_result = table.search_record(searched_value)
         log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
 
-        if not found_record is None:
+        if not search_result is None:
+            found_record, _, _, _ = search_result # ignore the values of internal page and record number
             output_str = ""
             for _, value in found_record.items():
                 output_str += f"{value} "
             print_output(output_str)
 
     elif command_type == "delete record":
-        pass
+        table.delete_record(args[1])
+        log_command(input_line, LogStatus.SUCCESS)
 
 
 

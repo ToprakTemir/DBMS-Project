@@ -184,11 +184,11 @@ class Table:
         return new_file_path, 0
 
 
-    def search_record(self, key: str | int) -> Optional[Dict[str, str|int]]:
+    def search_record(self, key: str | int) -> tuple[dict[str, str | int], str, int, int] | None:
         """
         Search for a record in the table by the primary key.
         :param key: The primary key value to search for.
-        :return: The record if found, None otherwise.
+        :return: The record and location in memory if found, None otherwise.
         """
         for file_path in self.files:
             with open(file_path, 'rb') as f:
@@ -197,6 +197,7 @@ class Table:
                 file_header = f.read(self.FILE_HEADER_SIZE)
                 file_bitmap = int.from_bytes(file_header, 'big')
 
+                # iterate over pages in file
                 for page_number in range(self.PAGES_PER_FILE):
                     if not file_bitmap & (1 << page_number):
                         continue
@@ -205,19 +206,16 @@ class Table:
                     page_header = f.read(self.PAGE_HEADER_SIZE)
                     page_bitmap = int.from_bytes(page_header, 'big')
 
-                    entries = []
+                    # iterate over slots in page
+                    pk = list(self.fields.keys())[self.pk_idx]
                     for slot in range(self.PAGE_SLOTS):
                         if not page_bitmap & (1 << slot):
                             continue
                         f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size + self.PAGE_HEADER_SIZE + slot * self.entry_size)
                         entry_encoded = f.read(self.entry_size)
                         entry = self.decode(entry_encoded)
-                        entries.append(entry)
-
-                    pk = list(self.fields.keys())[self.pk_idx]
-                    for entry in entries:
                         if entry[pk] == key:
-                            return entry
+                            return entry, file_path, page_number, slot
 
 
     def encode_record(self, field_values: Tuple[str|int]) -> bytes:
@@ -263,4 +261,41 @@ class Table:
         return record
 
     def delete_record(self, pk_value: str) -> None:
-        raise NotImplementedError()
+        """
+        Delete a record from the table by primary key.
+
+        :param pk_value: The primary key value identifying the record to delete.
+        :raises KeyError: If no record with the given primary key exists.
+        """
+        pk_field_name = list(self.fields.keys())[self.pk_idx]
+
+        search_result = self.search_record(pk_value)
+        if search_result is None:
+            return # No record found with the given primary key, nothing to delete
+        entry, file_path, page_number, slot_idx = search_result
+
+        with open(file_path, 'r+b') as f:
+            # seek to the page header
+            f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size)
+            page_header = f.read(self.PAGE_HEADER_SIZE)
+            page_bitmap = int.from_bytes(page_header, 'big')
+
+            # clear the slot in the bitmap
+            page_bitmap &= ~(1 << slot_idx)
+
+            # write the updated bitmap back to the file
+            f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size)
+            f.write(page_bitmap.to_bytes(self.PAGE_HEADER_SIZE, 'big'))
+
+            # clear the entry in the page, isn't strictly necessary after marking the slot as empty but might prevent bugs
+            f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size + self.PAGE_HEADER_SIZE + slot_idx * self.entry_size)
+            f.write(bytearray(self.entry_size))
+
+            # check if the page is now empty, if so, update the file header
+            if page_bitmap == 0:
+                f.seek(0)
+                file_header = f.read(self.FILE_HEADER_SIZE)
+                file_bitmap = int.from_bytes(file_header, 'big')
+                file_bitmap &= ~(1 << page_number)
+                f.seek(0)
+                f.write(file_bitmap.to_bytes(self.FILE_HEADER_SIZE, 'big'))
