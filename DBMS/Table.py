@@ -86,14 +86,11 @@ class Table:
         :param file_path: The path to the file to be allocated.
         :raises FileExistsError: If the file already exists.
         """
+        if os.path.exists(file_path):
+            raise FileExistsError(f"File '{file_path}' already exists. Cannot allocate a new file with the same name.")
         with open(file_path, 'wb') as f:
-            # Write 32-byte file header (256 bits = 256 pages)
-            f.write(bytearray(self.FILE_HEADER_SIZE))
-
-            # Write empty pages: each page has 1-byte page bitmap + 8 empty records
-            for _ in range(self.PAGES_PER_FILE):
-                # 1 byte for page header + self.PAGE_SLOTS empty records
-                f.write(bytearray(self.PAGE_HEADER_SIZE + self.PAGE_SLOTS * self.entry_size))
+            file_size = self.FILE_HEADER_SIZE + self.PAGES_PER_FILE * self.page_size
+            f.write(bytearray(file_size))  # Write a bytearray of size file_size
 
 
     def add_record(self, field_values: Tuple[str|int]) -> None:
@@ -123,21 +120,24 @@ class Table:
 
             # find the first available slot in the page
             slot_idx = 0
-            while page_bitmap % (1 << slot_idx) != 0 and slot_idx < self.PAGE_SLOTS:
+            while page_bitmap & (1 << slot_idx) and slot_idx < self.PAGE_SLOTS:
                 slot_idx += 1
             if slot_idx >= self.PAGE_SLOTS: # sanity check
                 raise ValueError(f"No available slots in page {page_number} of file {file_path}, even though it is returned as an unfilled page from search_unfilled_page() function.")
 
-            # update the page bitmap to mark the slot as filled
-            page_bitmap |= (1 << slot_idx)
-            f.read(self.entry_size * slot_idx)  # skip to the slot
+            page_bitmap |= (1 << slot_idx) # update the page bitmap to mark the slot as filled
+            f.seek(self.FILE_HEADER_SIZE
+                   + page_number * self.page_size
+                   + self.PAGE_HEADER_SIZE
+                   + slot_idx * self.entry_size)
 
             # encode the record and write it to the slot
             entry_encoded = self.encode_record(field_values)
+            assert len(entry_encoded) == self.entry_size, f"Encoded entry size {len(entry_encoded)} does not match expected entry size {self.entry_size}."
             f.write(entry_encoded)
 
             # write the updated page header
-            f.seek(page_number * self.page_size)
+            f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size)
             f.write(page_bitmap.to_bytes(self.PAGE_HEADER_SIZE, 'big'))
 
             # update the file header to mark the page as nonempty
@@ -152,7 +152,7 @@ class Table:
     def search_unfilled_page(self) -> Tuple[str, int]:
         """
         Search for the first unfilled page in the table.
-        :return: A tuple containing the file name and page number of the first unfilled page.
+        :return: A tuple containing the file path and page number of the first unfilled page.
         """
         for file_path in self.files:
             with open(file_path, 'rb') as f:
@@ -165,7 +165,7 @@ class Table:
                     if not file_bitmap & (1 << page_number):
                         return file_path, page_number
 
-                    f.seek(page_number * self.page_size)
+                    f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size)
                     page_header = f.read(self.PAGE_HEADER_SIZE)
                     page_bitmap = int.from_bytes(page_header, 'big')
                     if page_bitmap != (1 << self.PAGE_SLOTS) - 1:
@@ -178,10 +178,10 @@ class Table:
         new_file_path = os.path.join(DISK_PATH, new_file_name)
         self.allocate_file(new_file_path)
 
-        self.files.append(new_file_name)
+        self.files.append(new_file_path)
         self.catalog_entry["file_count"] += 1
         save_catalog_entry(self.table_name, self.catalog_entry) # overwrite the catalog entry
-        return new_file_name, 0
+        return new_file_path, 0
 
 
     def search_record(self, key: str | int) -> Optional[Dict[str, str|int]]:
@@ -201,7 +201,7 @@ class Table:
                     if not file_bitmap & (1 << page_number):
                         continue
 
-                    f.seek(page_number * self.page_size)
+                    f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size)
                     page_header = f.read(self.PAGE_HEADER_SIZE)
                     page_bitmap = int.from_bytes(page_header, 'big')
 
@@ -209,12 +209,14 @@ class Table:
                     for slot in range(self.PAGE_SLOTS):
                         if not page_bitmap & (1 << slot):
                             continue
+                        f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size + self.PAGE_HEADER_SIZE + slot * self.entry_size)
                         entry_encoded = f.read(self.entry_size)
                         entry = self.decode(entry_encoded)
                         entries.append(entry)
 
+                    pk = list(self.fields.keys())[self.pk_idx]
                     for entry in entries:
-                        if entry.get(self.pk_idx) == key:
+                        if entry[pk] == key:
                             return entry
 
 
@@ -254,7 +256,7 @@ class Table:
                 record[field_name] = int.from_bytes(entry[offset:offset + 4], 'big')
                 offset += 4
             elif field_type == "str":
-                record[field_name] = entry[offset:offset + 256].decode('utf-8').strip('\x00')
+                record[field_name] = entry[offset:offset + 256].decode('utf-8').rstrip('\x00')
                 offset += 256
             else:
                 raise ValueError(f"Unsupported field type '{field_type}'.")
