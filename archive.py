@@ -93,6 +93,8 @@ def process_command(input_line):
 
 def main(input_file_path):
     input_file = open(input_file_path, 'r')
+    if os.path.exists(DISK_PATH):
+        os.mkdir(DISK_PATH)
     for line in input_file:
         process_command(line)
 
