@@ -5,8 +5,8 @@ import time
 
 class LogStatus(Enum):
     BEGIN = "BEGIN"
-    SUCCESS = "COMMIT"
-    FAILURE = "ROLLBACK"
+    SUCCESS = "success"
+    FAILURE = "failure"
 
 def log_command(message: str, status: LogStatus) -> None:
     """
