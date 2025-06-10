@@ -23,6 +23,9 @@ class Table:
         if len(table_name) > self.MAX_TABLE_NAME_LENGTH_ALLOWED:
             raise ValueError(f"Table name '{table_name}' exceeds maximum length of {self.MAX_TABLE_NAME_LENGTH_ALLOWED} characters.")
 
+        if not table_name.isalnum() or table_name.isnumeric():
+            raise ValueError(f"Table name '{table_name}' must be alphanumeric and not purely numeric.")
+
         # Page Structure: [ bitmap | record 0 | record 1 | ... | record 7 ]
         self.PAGE_HEADER_SIZE = 1 # 1 byte for bitmap of 8 bits
         self.FILE_HEADER_SIZE = 32 # 32 bytes for page bitmap of 256 bits
@@ -54,10 +57,20 @@ class Table:
     def _create_table(self, args: Tuple[int, int, Dict[str, str]]):
         field_count, pk_idx, fields = args
 
+        if field_count <= 0:
+            raise ValueError("Table must have at least one field.")
+        if not (0 <= pk_idx < field_count):
+            raise ValueError(f"Primary key index {pk_idx} is out of bounds for {field_count} fields.")
+        if len(fields) != field_count:
+            raise ValueError("Number of fields provided does not match field count (check for duplicate field names).")
+
         entry_size = 0
         for field_name, field_type in fields.items():
-            if len(field_type) > self.MAX_FIELD_NAME_LENGTH_ALLOWED:
-                raise ValueError(f"Field type '{field_type}' for field '{field_name}' exceeds maximum length of {self.MAX_FIELD_NAME_LENGTH_ALLOWED} characters.")
+            if len(field_name) > self.MAX_FIELD_NAME_LENGTH_ALLOWED:
+                raise ValueError(f"Field name '{field_name}' exceeds maximum length of {self.MAX_FIELD_NAME_LENGTH_ALLOWED} characters.")
+            if not field_name.isalnum() or field_name.isnumeric():
+                raise ValueError(f"Field name '{field_name}' must be alphanumeric and not purely numeric.")
+
             if field_type == "int":
                 entry_size += 4 # bytes
             elif field_type == "str":
@@ -235,7 +248,7 @@ class Table:
         i = 0
         for _, field_type in self.fields.items():
             if field_type == "int":
-                entry.extend(int(field_values[i]).to_bytes(4, 'big'))
+                entry.extend(int(field_values[i]).to_bytes(4, 'big', signed=True))
                 i += 1
             elif field_type == "str":
                 field_value = str(field_values[i]).encode('utf-8')
@@ -255,7 +268,7 @@ class Table:
         offset = 0
         for field_name, field_type in self.fields.items():
             if field_type == "int":
-                record[field_name] = int.from_bytes(entry[offset:offset + 4], 'big')
+                record[field_name] = int.from_bytes(entry[offset:offset + 4], 'big', signed=True)
                 offset += 4
             elif field_type == "str":
                 record[field_name] = entry[offset:offset + 256].decode('utf-8').rstrip('\x00')

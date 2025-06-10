@@ -16,97 +16,98 @@ def print_stdout(message: str) -> None:
         print(message)
 
 def process_command(input_line):
-    """
-    Parse a command line input and return the command and its arguments.
-    """
-    input_line_list = input_line.strip().split()
-    command_type = " ".join(input_line_list[:2]) # first two words define the command type
-    args = input_line_list[2:] # remaining words are arguments
-    table_name = args[0]
+    try:
+        """
+        Parse a command line input and return the command and its arguments.
+        """
+        input_line_list = input_line.strip().split()
+        command_type = " ".join(input_line_list[:2]) # first two words define the command type
+        args = input_line_list[2:] # remaining words are arguments
+        table_name = args[0]
 
-    # CREATE COMMAND
-    if command_type == "create type":
-        if len(args) < 4:
-            log_command(input_line, LogStatus.FAILURE)
-            return
-
-        # Check if table already exists
-        if load_catalog_entry(table_name) is not None:
-            log_command(input_line, LogStatus.FAILURE)
-            return
-
-        try:
-            field_count = int(args[1])
-            pk_idx = int(args[2]) - 1 # arguments are 1-indexed, convert to 0-indexed
-            fields = args[3:]
-
-            if int(len(fields)/2) != field_count:
+        # CREATE COMMAND
+        if command_type == "create type":
+            if len(args) < 4:
                 log_command(input_line, LogStatus.FAILURE)
                 return
 
-            fields_dict = {}
-            i = 0
-            while i < len(fields):
-                fields_dict[fields[i]] = fields[i + 1]  # field name and type
-                i += 2
+            # Check if table already exists
+            if load_catalog_entry(table_name) is not None:
+                log_command(input_line, LogStatus.FAILURE)
+                return
 
-            Table(table_name, new_table_args=(field_count, pk_idx, fields_dict))
-            log_command(input_line, LogStatus.SUCCESS)
-        except (ValueError, IndexError) as e:
+            try:
+                field_count = int(args[1])
+                pk_idx = int(args[2]) - 1 # arguments are 1-indexed, convert to 0-indexed
+                fields = args[3:]
+
+                if int(len(fields)/2) != field_count:
+                    log_command(input_line, LogStatus.FAILURE)
+                    return
+
+                fields_dict = {}
+                i = 0
+                while i < len(fields):
+                    fields_dict[fields[i]] = fields[i + 1]  # field name and type
+                    i += 2
+
+                Table(table_name, new_table_args=(field_count, pk_idx, fields_dict))
+                log_command(input_line, LogStatus.SUCCESS)
+            except (ValueError, IndexError) as e:
+                log_command(input_line, LogStatus.FAILURE)
+            finally:
+                return
+
+        # ALL OTHER COMMANDS, GET TABLE SCHEMA FIRST
+        table_entry = load_catalog_entry(table_name)
+        if not table_entry:
             log_command(input_line, LogStatus.FAILURE)
-        finally:
             return
+        table = Table(table_name)
 
-    # ALL OTHER COMMANDS, GET TABLE SCHEMA FIRST
-    table_entry = load_catalog_entry(table_name)
-    if not table_entry:
+        if command_type == "create record":
+            field_values = args[1:]  # all arguments after the table name are field values
+
+            field_count = table_entry["field_count"]
+            if len(field_values) != field_count:
+                log_command(input_line, LogStatus.FAILURE)
+                return
+
+            # create a new record in the table
+            try:
+                table.add_record(field_values)
+                log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
+            except KeyConstraintViolation as e:
+                log_command(input_line, LogStatus.FAILURE)
+
+        elif command_type == "search record":
+            searched_value = args[1]
+            search_result = table.search_record(searched_value)
+
+            if not search_result is None:
+                log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
+                found_record, _, _, _ = search_result # ignore the values of internal page and record number
+                output_str = ""
+                for _, value in found_record.items():
+                    output_str += f"{value} "
+                print_output(output_str)
+            else:
+                log_command(input_line, LogStatus.FAILURE)
+
+        elif command_type == "delete record":
+            # convert pk to int if the pk is an int
+            pk_field_type = list(table.fields.values())[table.pk_idx]
+            pk_value = args[1]
+            if pk_field_type == 'int':
+                pk_value = int(pk_value)
+
+            deletion_successful = table.delete_record(pk_value)
+            if deletion_successful:
+                log_command(input_line, LogStatus.SUCCESS)
+            else:
+                log_command(input_line, LogStatus.FAILURE)
+    except (ValueError, KeyError, IndexError, OverflowError) as e:
         log_command(input_line, LogStatus.FAILURE)
-        return
-    table = Table(table_name)
-
-    if command_type == "create record":
-        field_values = args[1:]  # all arguments after the table name are field values
-
-        field_count = table_entry["field_count"]
-        if len(field_values) != field_count:
-            log_command(input_line, LogStatus.FAILURE)
-            return
-
-        # create a new record in the table
-        try:
-            table.add_record(field_values)
-            log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
-        except KeyConstraintViolation as e:
-            log_command(input_line, LogStatus.FAILURE)
-
-    elif command_type == "search record":
-        searched_value = args[1]
-        search_result = table.search_record(searched_value)
-
-        if not search_result is None:
-            log_command(input_line, LogStatus.SUCCESS)  # Log the command as successful
-            found_record, _, _, _ = search_result # ignore the values of internal page and record number
-            output_str = ""
-            for _, value in found_record.items():
-                output_str += f"{value} "
-            print_output(output_str)
-        else:
-            log_command(input_line, LogStatus.FAILURE)
-
-    elif command_type == "delete record":
-        # convert pk to int if the pk is an int
-        pk_field_type = list(table.fields.values())[table.pk_idx]
-        pk_value = args[1]
-        if pk_field_type == 'int':
-            pk_value = int(pk_value)
-
-        deletion_successful = table.delete_record(pk_value)
-        if deletion_successful:
-            log_command(input_line, LogStatus.SUCCESS)
-        else:
-            log_command(input_line, LogStatus.FAILURE)
-
-
 
 def main(input_file_path):
     input_file = open(input_file_path, 'r')
