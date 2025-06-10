@@ -1,0 +1,6 @@
+create record person Eve abc LosAngeles
+create record person Frank twentyfive Miami
+create type numbers 2 1 id int value int
+create record numbers 101 200
+create record numbers abc 300
+create record numbers 102 hello

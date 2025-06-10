@@ -1,0 +1,283 @@
+1749549690, create type university 4 1 name str ranking int students int location str, success
+1749549690, create type student 6 2 name str studentid int age int major str gpa int university str, success
+1749549690, create type professor 5 1 name str department str salary int courses int university str, success
+1749549690, create type course 6 3 title str professor str courseid int credits int semester str enrollment int, success
+1749549690, create type grade 4 1 studentid int courseid int grade str semester str, success
+1749549690, create record university Harvard 1 21000 Cambridge, success
+1749549690, create record university MIT 2 11000 Cambridge, success
+1749549690, create record university Stanford 3 17000 PaloAlto, success
+1749549690, create record university Berkeley 4 45000 Berkeley, success
+1749549690, create record university Yale 5 13000 NewHaven, success
+1749549690, search record university Harvard, success
+1749549690, search record university MIT, success
+1749549690, create record professor DrSmith ComputerScience 120000 4 Harvard, success
+1749549690, create record professor DrJohnson Mathematics 110000 3 MIT, success
+1749549690, create record professor DrWilliams Physics 115000 3 Stanford, success
+1749549690, create record professor DrBrown Chemistry 105000 2 Berkeley, success
+1749549690, create record professor DrDavis Biology 100000 3 Yale, success
+1749549690, create record professor DrMiller Economics 95000 4 Harvard, success
+1749549690, create record professor DrWilson Psychology 90000 2 MIT, success
+1749549690, search record professor DrSmith, success
+1749549690, search record professor DrJohnson, success
+1749549690, create record student Alice 10001 20 ComputerScience 85 Harvard, success
+1749549690, create record student Bob 10002 19 Mathematics 92 MIT, success
+1749549690, create record student Charlie 10003 21 Physics 88 Stanford, success
+1749549690, create record student Diana 10004 20 Chemistry 95 Berkeley, success
+1749549690, create record student Eve 10005 19 Biology 91 Yale, success
+1749549690, create record student Frank 10006 22 Economics 87 Harvard, success
+1749549690, create record student Grace 10007 20 Psychology 89 MIT, success
+1749549690, create record student Henry 10008 21 ComputerScience 84 Stanford, success
+1749549690, create record student Ivy 10009 19 Mathematics 93 Berkeley, success
+1749549690, create record student Jack 10010 20 Physics 86 Yale, success
+1749549690, search record student 10001, success
+1749549690, search record student 10005, success
+1749549690, search record student 10010, success
+1749549690, create record course IntroCS DrSmith 101 4 Fall2025 150, success
+1749549690, create record course Calculus DrJohnson 201 4 Fall2025 120, success
+1749549690, create record course Physics1 DrWilliams 301 3 Fall2025 100, success
+1749549690, create record course Chemistry1 DrBrown 401 4 Fall2025 80, success
+1749549690, create record course Biology1 DrDavis 501 3 Fall2025 90, success
+1749549690, create record course Microeconomics DrMiller 601 3 Fall2025 200, success
+1749549690, create record course CognitivePsych DrWilson 701 3 Fall2025 60, success
+1749549690, search record course 101, success
+1749549690, search record course 201, success
+1749549690, search record course 701, success
+1749549690, create record grade 10001 101 A Fall2025, success
+1749549690, create record grade 10001 601 B Fall2025, failure
+1749549690, create record grade 10002 201 A Fall2025, success
+1749549690, create record grade 10002 701 B Fall2025, failure
+1749549690, create record grade 10003 301 A Fall2025, success
+1749549690, create record grade 10003 101 C Fall2025, failure
+1749549690, create record grade 10004 401 A Fall2025, success
+1749549690, create record grade 10004 201 B Fall2025, failure
+1749549690, create record grade 10005 501 A Fall2025, success
+1749549690, create record grade 10005 301 B Fall2025, failure
+1749549690, search record grade 10001, success
+1749549690, search record grade 10003, success
+1749549690, search record grade 10005, success
+1749549690, create type research 5 1 projectid int title str lead str funding int duration str, success
+1749549690, create record research 2001 AIInEducation DrSmith 500000 3years, success
+1749549690, create record research 2002 QuantumComputing DrWilliams 750000 4years, success
+1749549690, create record research 2003 GeneTherapy DrDavis 600000 5years, success
+1749549690, create record research 2004 EconomicModels DrMiller 300000 2years, success
+1749549690, search record research 2001, success
+1749549690, search record research 2003, success
+1749549690, create record student Kevin 10011 21 ComputerScience 90 Harvard, success
+1749549690, create record student Linda 10012 20 Mathematics 94 MIT, success
+1749549690, create record student Mike 10013 19 Physics 87 Stanford, success
+1749549690, create record student Nancy 10014 22 Chemistry 96 Berkeley, success
+1749549690, create record student Oscar 10015 20 Biology 88 Yale, success
+1749549690, create record student Paula 10016 21 Economics 92 Harvard, success
+1749549690, create record student Quinn 10017 19 Psychology 85 MIT, success
+1749549690, create record student Rachel 10018 20 ComputerScience 91 Stanford, success
+1749549690, create record student Steve 10019 21 Mathematics 89 Berkeley, success
+1749549690, create record student Tina 10020 19 Physics 93 Yale, success
+1749549690, search record student 10015, success
+1749549690, search record student 10020, success
+1749549690, create record course AdvancedCS DrSmith 102 4 Spring2026 100, success
+1749549690, create record course Statistics DrJohnson 202 3 Spring2026 80, success
+1749549690, create record course Physics2 DrWilliams 302 4 Spring2026 70, success
+1749549690, create record course OrganicChem DrBrown 402 4 Spring2026 60, success
+1749549690, create record course Genetics DrDavis 502 3 Spring2026 50, success
+1749549690, search record course 102, success
+1749549690, search record course 502, success
+1749549690, delete record student 10003, success
+1749549690, search record student 10003, failure
+1749549690, create record student NewCharlie 10021 20 Physics 88 Stanford, success
+1749549690, search record student 10021, success
+1749549690, create record grade 10011 102 A Spring2026, success
+1749549690, create record grade 10012 202 B Spring2026, success
+1749549690, create record grade 10013 302 A Spring2026, success
+1749549690, create record grade 10014 402 A Spring2026, success
+1749549690, create record grade 10015 502 B Spring2026, success
+1749549690, search record grade 10011, success
+1749549690, search record grade 10015, success
+1749549690, create type department 4 1 name str head str budget int university str, success
+1749549690, create record department ComputerScience DrSmith 2000000 Harvard, success
+1749549690, create record department Mathematics DrJohnson 1500000 MIT, success
+1749549690, create record department Physics DrWilliams 1800000 Stanford, success
+1749549690, create record department Chemistry DrBrown 1200000 Berkeley, success
+1749549690, create record department Biology DrDavis 1600000 Yale, success
+1749549690, search record department ComputerScience, success
+1749549690, search record department Biology, success
+1749549690, create record student Uma 10022 22 ComputerScience 86 Harvard, success
+1749549691, create record student Victor 10023 20 Mathematics 95 MIT, success
+1749549691, create record student Wendy 10024 19 Physics 84 Stanford, success
+1749549691, create record student Xavier 10025 21 Chemistry 97 Berkeley, success
+1749549691, create record student Yara 10026 20 Biology 89 Yale, success
+1749549691, create record student Zach 10027 19 Economics 91 Harvard, success
+1749549691, search record student 10025, success
+1749549691, search record student 10027, success
+1749549691, create record course DatabaseSystems DrSmith 103 3 Fall2026 80, success
+1749549691, create record course LinearAlgebra DrJohnson 203 4 Fall2026 100, success
+1749549691, create record course QuantumMechanics DrWilliams 303 4 Fall2026 50, success
+1749549691, create record course PhysicalChemistry DrBrown 403 3 Fall2026 40, success
+1749549691, create record course Biochemistry DrDavis 503 4 Fall2026 60, success
+1749549691, search record course 103, success
+1749549691, search record course 303, success
+1749549691, delete record professor DrWilson, success
+1749549691, search record professor DrWilson, failure
+1749549691, create record professor DrNewWilson Psychology 92000 3 MIT, success
+1749549691, search record professor DrNewWilson, success
+1749549691, create record grade 10022 103 B Fall2026, success
+1749549691, create record grade 10023 203 A Fall2026, success
+1749549691, create record grade 10024 303 B Fall2026, success
+1749549691, create record grade 10025 403 A Fall2026, success
+1749549691, create record grade 10026 503 A Fall2026, success
+1749549691, search record grade 10022, success
+1749549691, search record grade 10026, success
+1749549691, create type scholarship 4 1 name str amount int criteria str university str, success
+1749549691, create record scholarship MeritScholarship 50000 HighGPA Harvard, success
+1749549691, create record scholarship NeedBased 30000 LowIncome MIT, success
+1749549691, create record scholarship ResearchGrant 25000 ResearchExcellence Stanford, success
+1749549691, create record scholarship DiversityScholarship 40000 Underrepresented Berkeley, success
+1749549691, create record scholarship AlumniScholarship 35000 AlumniConnection Yale, success
+1749549691, search record scholarship MeritScholarship, success
+1749549691, search record scholarship DiversityScholarship, success
+1749549691, create record student Aaron 10028 21 ComputerScience 98 Harvard, success
+1749549691, create record student Betty 10029 19 Mathematics 91 MIT, success
+1749549691, create record student Carlos 10030 20 Physics 85 Stanford, success
+1749549691, create record student Donna 10031 22 Chemistry 94 Berkeley, success
+1749549691, create record student Eddie 10032 19 Biology 87 Yale, success
+1749549691, create record student Fiona 10033 21 Economics 92 Harvard, success
+1749549691, create record student George 10034 20 Psychology 88 MIT, success
+1749549691, create record student Helen 10035 19 ComputerScience 96 Stanford, success
+1749549691, search record student 10028, success
+1749549691, search record student 10035, success
+1749549691, delete record university Berkeley, success
+1749549691, search record university Berkeley, failure
+1749549691, create record university NewBerkeley 6 42000 Berkeley, success
+1749549691, search record university NewBerkeley, success
+1749549691, create record course MachineLearning DrSmith 104 4 Spring2027 120, success
+1749549691, create record course DifferentialEquations DrJohnson 204 3 Spring2027 90, success
+1749549691, create record course AstroPhysics DrWilliams 304 4 Spring2027 60, success
+1749549691, create record course AnalyticalChemistry DrBrown 404 3 Spring2027 50, success
+1749549691, create record course MolecularBiology DrDavis 504 4 Spring2027 70, success
+1749549691, search record course 104, success
+1749549691, search record course 504, success
+1749549691, create record grade 10028 104 A Spring2027, success
+1749549691, create record grade 10029 204 B Spring2027, success
+1749549691, create record grade 10030 304 A Spring2027, success
+1749549691, create record grade 10031 404 A Spring2027, success
+1749549691, create record grade 10032 504 B Spring2027, success
+1749549691, search record grade 10028, success
+1749549691, search record grade 10032, success
+1749549691, create type library 4 1 name str books int digital int university str, success
+1749549691, create record library WidenerLibrary 17000000 5000000 Harvard, success
+1749549691, create record library TechLibrary 2500000 8000000 MIT, success
+1749549691, create record library GreenLibrary 9000000 4000000 Stanford, success
+1749549691, create record library MoffittLibrary 13000000 6000000 NewBerkeley, success
+1749549691, create record library SterlingLibrary 15000000 3500000 Yale, success
+1749549691, search record library WidenerLibrary, success
+1749549691, search record library MoffittLibrary, success
+1749549691, create record student Igor 10036 20 Mathematics 89 MIT, success
+1749549691, create record student Julia 10037 21 Physics 93 Stanford, success
+1749549691, create record student Keith 10038 19 Chemistry 86 NewBerkeley, success
+1749549691, create record student Luna 10039 22 Biology 95 Yale, success
+1749549691, create record student Mark 10040 20 Economics 90 Harvard, success
+1749549691, search record student 10039, success
+1749549691, search record student 10040, success
+1749549691, delete record course 301, success
+1749549691, search record course 301, failure
+1749549691, create record course NewPhysics1 DrWilliams 305 3 Fall2027 110, success
+1749549691, search record course 305, success
+1749549691, create record grade 10036 203 A Fall2027, success
+1749549691, create record grade 10037 305 B Fall2027, success
+1749549691, create record grade 10038 404 A Fall2027, success
+1749549691, create record grade 10039 504 A Fall2027, success
+1749549691, create record grade 10040 601 B Fall2027, success
+1749549691, search record grade 10036, success
+1749549691, search record grade 10040, success
+1749549691, create type event 5 1 eventid int name str date str location str attendees int, success
+1749549691, create record event 3001 TechConference 2025-10-15 Harvard 500, success
+1749549691, create record event 3002 ScienceFair 2025-11-20 MIT 300, success
+1749549691, create record event 3003 ResearchSymposium 2025-12-05 Stanford 250, success
+1749549691, create record event 3004 ChemistryWorkshop 2026-01-10 NewBerkeley 150, success
+1749549691, create record event 3005 BiologyLecture 2026-02-14 Yale 200, success
+1749549691, search record event 3001, success
+1749549691, search record event 3005, success
+1749549691, create record student Nina 10041 19 ComputerScience 87 Harvard, success
+1749549691, create record student Owen 10042 21 Mathematics 92 MIT, success
+1749549691, create record student Penny 10043 20 Physics 84 Stanford, success
+1749549691, create record student Rick 10044 22 Chemistry 98 NewBerkeley, success
+1749549691, create record student Sarah 10045 19 Biology 91 Yale, success
+1749549691, create record student Tom 10046 20 Economics 89 Harvard, success
+1749549691, create record student Ursula 10047 21 Psychology 85 MIT, success
+1749549691, create record student Vince 10048 19 ComputerScience 94 Stanford, success
+1749549691, search record student 10044, success
+1749549691, search record student 10048, success
+1749549691, create record course WebDevelopment DrSmith 105 3 Summer2027 60, success
+1749549691, create record course ProbabilityTheory DrJohnson 205 4 Summer2027 50, success
+1749549691, create record course ParticlePhysics DrWilliams 306 4 Summer2027 40, success
+1749549691, create record course InorganicChemistry DrBrown 405 3 Summer2027 45, success
+1749549691, create record course CellBiology DrDavis 505 3 Summer2027 55, success
+1749549691, search record course 105, success
+1749549691, search record course 505, success
+1749549691, delete record student 10020, success
+1749549691, search record student 10020, failure
+1749549691, create record student NewTina 10049 20 Physics 93 Yale, success
+1749549691, search record student 10049, success
+1749549691, create record grade 10041 105 A Summer2027, success
+1749549691, create record grade 10042 205 B Summer2027, success
+1749549691, create record grade 10043 306 A Summer2027, success
+1749549691, create record grade 10044 405 A Summer2027, success
+1749549691, create record grade 10045 505 B Summer2027, success
+1749549691, search record grade 10041, success
+1749549691, search record grade 10045, success
+1749549691, create type publication 5 1 pubid int title str author str journal str year int, success
+1749549691, create record publication 4001 AIInQuantumComputing DrSmith NaturePhysics 2025, success
+1749549691, create record publication 4002 MathematicalModeling DrJohnson JournalMath 2025, success
+1749549691, create record publication 4003 QuantumEntanglement DrWilliams ScienceMagazine 2025, success
+1749549691, create record publication 4004 ChemicalReactions DrBrown ChemistryToday 2025, success
+1749549691, create record publication 4005 GeneticEngineering DrDavis NatureBiotechnology 2025, success
+1749549691, search record publication 4001, success
+1749549691, search record publication 4005, success
+1749549691, create record student Walter 10050 21 Economics 88 Harvard, success
+1749549691, search record student 10050, success
+1749549691, delete record research 2004, success
+1749549691, search record research 2004, failure
+1749549691, create record research 2006 BehavioralEconomics DrMiller 400000 3years, success
+1749549691, search record research 2006, success
+1749549691, create record grade 10046 601 A Summer2027, success
+1749549691, create record grade 10047 701 B Summer2027, success
+1749549691, create record grade 10048 105 A Summer2027, success
+1749549691, create record grade 10049 306 B Summer2027, success
+1749549691, create record grade 10050 601 A Summer2027, success
+1749549691, search record grade 10046, success
+1749549691, search record grade 10050, success
+1749549691, create type facility 4 1 name str type str capacity int university str, success
+1749549691, create record facility ScienceCenter Laboratory 200 Harvard, success
+1749549691, create record facility ComputerLab Classroom 50 MIT, success
+1749549691, create record facility Observatory Research 25 Stanford, success
+1749549691, create record facility ChemLab Laboratory 80 NewBerkeley, success
+1749549691, create record facility Greenhouse Research 100 Yale, success
+1749549691, search record facility ScienceCenter, success
+1749549691, search record facility Greenhouse, success
+1749549691, delete record grade 10003, success
+1749549691, search record grade 10003, failure
+1749549691, create record grade 10051 103 A Fall2027, success
+1749549691, search record grade 10051, success
+1749549691, create type invalid_type_name 2 1 field@ str value int, failure
+1749549691, create record nonexistent_type test value, failure
+1749549691, search record nonexistent_type key, failure
+1749549691, delete record nonexistent_type key, failure
+1749549691, create record student 10051 20 Physics, failure
+1749549691, create record student TooManyFields 10052 20 Physics 90 Stanford ExtraField, failure
+1749549691, search record student InvalidKey, failure
+1749549691, delete record student InvalidKey, failure
+1749549691, create type testtype 2 1 name str value abc, failure
+1749549691, create type validtype 0 1 name str, failure
+1749549691, create type validtype2 2 0 name str value int, failure
+1749549691, create type validtype3 2 3 name str value int, failure
+1749549691, search record university Harvard, success
+1749549691, search record student 10001, success
+1749549691, search record professor DrSmith, success
+1749549691, search record course 101, success
+1749549691, search record grade 10001, success
+1749549691, search record research 2001, success
+1749549691, search record department ComputerScience, success
+1749549691, search record scholarship MeritScholarship, success
+1749549691, search record library WidenerLibrary, success
+1749549691, search record event 3001, success
+1749549691, search record publication 4001, success
+1749549691, search record facility ScienceCenter, success

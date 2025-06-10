@@ -1,0 +1,4 @@
+create record person Alice 30 Boston
+create record person Bob 35 Chicago
+search record person Alice
+search record person Bob

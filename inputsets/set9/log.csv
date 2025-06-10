@@ -1,0 +1,22 @@
+1749549228, create type house 4 1 name str leader str military int wealth int, success
+1749549228, create type spicefield 3 2 region str fieldid int production int, success
+1749549228, create type alliance 3 1 house1 str house2 str strength int, success
+1749549238, create record house Atreides Duke 8000 5000, success
+1749549238, create record house Harkonnen Baron 12000 3000, success
+1749549238, create record house Corrino Emperor 15000 10000, success
+1749549238, search record house Atreides, success
+1749549238, search record house Harkonnen, success
+1749549261, create record spicefield SouthDesert 1001 500, success
+1749549261, create record spicefield NorthDesert 1002 750, success
+1749549261, create record spicefield DeepDesert 1003 1000, success
+1749549261, search record spicefield 1003, success
+1749549261, search record spicefield 1001, success
+1749549280, create record alliance Atreides Fremen 9, success
+1749549280, create record alliance Harkonnen Sardaukar 7, success
+1749549280, delete record house Harkonnen, success
+1749549280, create record house Ordos Duke 6000 4000, success
+1749549280, search record alliance Atreides, success
+1749549280, search record house Ordos, success
+1749549280, create record spicefield WestDesert 1004 600, success
+1749549280, delete record alliance Harkonnen, success
+1749549280, search record alliance Harkonnen, failure

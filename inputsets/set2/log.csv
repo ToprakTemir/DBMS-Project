@@ -1,0 +1,18 @@
+1749547254, create type 123 2 1 name str age int, failure
+1749547254, create type housewithverylongnameexceedingthirtycharacters 2 1 name str age int, failure
+1749547254, create type house_with_underscore 2 1 name str age int, failure
+1749547254, create type house@ 2 1 name str age int, failure
+1749547254, create type house! 2 1 name str age int, failure
+1749547292, create type validtype 2 0 name str age int, failure
+1749547292, create type validtype2 2 3 name str age int, failure
+1749547292, create type validtype3 2 -1 name str age int, failure
+1749547292, create type validtype4 0 1 name str, failure
+1749547320, create type validtype5 2 1 123 str age int, failure
+1749547320, create type validtype6 2 1 namewithverylongfieldnameexceedingfortycharacters str age int, failure
+1749547320, create type validtype7 2 1 name@ str age int, failure
+1749547320, create type validtype8 2 1 name_with_underscore str age int, failure
+1749547320, create type validtype9 2 1 name str age float, failure
+1749547320, create type validtype10 2 1 name str name int, failure
+1749547327, create type validtype11 20 1 f1 str f2 int f3 str f4 int f5 str f6 int f7 str f8 int f9 str f10 int f11 str f12 int f13 str f14 int f15 str f16 int f17 str f18 int f19 str f20 int, failure
+1749547327, create type validhouse 2 1 name str age int, success
+1749547327, create type validhouse 2 1 leader str power int, failure

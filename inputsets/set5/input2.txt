@@ -1,0 +1,4 @@
+create record
+create record house
+create house 2 1 name str age int
+invalid_command house test

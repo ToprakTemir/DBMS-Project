@@ -1,0 +1,4 @@
+delete record nonexistent_type somekey
+delete record student 999
+create record student 102 Jane B
+search record student 102

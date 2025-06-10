@@ -1,0 +1,77 @@
+Harvard 1 21000 Cambridge
+MIT 2 11000 Cambridge
+DrSmith ComputerScience 120000 4 Harvard
+DrJohnson Mathematics 110000 3 MIT
+Alice 10001 20 ComputerScience 85 Harvard
+Eve 10005 19 Biology 91 Yale
+Jack 10010 20 Physics 86 Yale
+IntroCS DrSmith 101 4 Fall2025 150
+Calculus DrJohnson 201 4 Fall2025 120
+CognitivePsych DrWilson 701 3 Fall2025 60
+10001 101 A Fall2025
+10003 301 A Fall2025
+10005 501 A Fall2025
+2001 AIInEducation DrSmith 500000 3years
+2003 GeneTherapy DrDavis 600000 5years
+Oscar 10015 20 Biology 88 Yale
+Tina 10020 19 Physics 93 Yale
+AdvancedCS DrSmith 102 4 Spring2026 100
+Genetics DrDavis 502 3 Spring2026 50
+NewCharlie 10021 20 Physics 88 Stanford
+10011 102 A Spring2026
+10015 502 B Spring2026
+ComputerScience DrSmith 2000000 Harvard
+Biology DrDavis 1600000 Yale
+Xavier 10025 21 Chemistry 97 Berkeley
+Zach 10027 19 Economics 91 Harvard
+DatabaseSystems DrSmith 103 3 Fall2026 80
+QuantumMechanics DrWilliams 303 4 Fall2026 50
+DrNewWilson Psychology 92000 3 MIT
+10022 103 B Fall2026
+10026 503 A Fall2026
+MeritScholarship 50000 HighGPA Harvard
+DiversityScholarship 40000 Underrepresented Berkeley
+Aaron 10028 21 ComputerScience 98 Harvard
+Helen 10035 19 ComputerScience 96 Stanford
+NewBerkeley 6 42000 Berkeley
+MachineLearning DrSmith 104 4 Spring2027 120
+MolecularBiology DrDavis 504 4 Spring2027 70
+10028 104 A Spring2027
+10032 504 B Spring2027
+WidenerLibrary 17000000 5000000 Harvard
+MoffittLibrary 13000000 6000000 NewBerkeley
+Luna 10039 22 Biology 95 Yale
+Mark 10040 20 Economics 90 Harvard
+NewPhysics1 DrWilliams 305 3 Fall2027 110
+10036 203 A Fall2027
+10040 601 B Fall2027
+3001 TechConference 2025-10-15 Harvard 500
+3005 BiologyLecture 2026-02-14 Yale 200
+Rick 10044 22 Chemistry 98 NewBerkeley
+Vince 10048 19 ComputerScience 94 Stanford
+WebDevelopment DrSmith 105 3 Summer2027 60
+CellBiology DrDavis 505 3 Summer2027 55
+NewTina 10049 20 Physics 93 Yale
+10041 105 A Summer2027
+10045 505 B Summer2027
+4001 AIInQuantumComputing DrSmith NaturePhysics 2025
+4005 GeneticEngineering DrDavis NatureBiotechnology 2025
+Walter 10050 21 Economics 88 Harvard
+2006 BehavioralEconomics DrMiller 400000 3years
+10046 601 A Summer2027
+10050 601 A Summer2027
+ScienceCenter Laboratory 200 Harvard
+Greenhouse Research 100 Yale
+10051 103 A Fall2027
+Harvard 1 21000 Cambridge
+Alice 10001 20 ComputerScience 85 Harvard
+DrSmith ComputerScience 120000 4 Harvard
+IntroCS DrSmith 101 4 Fall2025 150
+10001 101 A Fall2025
+2001 AIInEducation DrSmith 500000 3years
+ComputerScience DrSmith 2000000 Harvard
+MeritScholarship 50000 HighGPA Harvard
+WidenerLibrary 17000000 5000000 Harvard
+3001 TechConference 2025-10-15 Harvard 500
+4001 AIInQuantumComputing DrSmith NaturePhysics 2025
+ScienceCenter Laboratory 200 Harvard

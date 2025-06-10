@@ -180,6 +180,20 @@ class Table:
         :param key: The primary key value to search for.
         :return: The record and location in memory if found, None otherwise.
         """
+        pk = list(self.fields.keys())[self.pk_idx]
+        pk_type = self.fields[pk]
+
+        search_key = key
+        if pk_type == 'int':
+            if not isinstance(key, int):
+                try:
+                    search_key = int(key)
+                except (ValueError, TypeError):
+                    return None
+        elif pk_type == 'str':
+            if not isinstance(key, str):
+                search_key = str(key)
+
         for file_path in self.files:
             with open(file_path, 'rb') as f:
                 # read the file header
@@ -197,14 +211,13 @@ class Table:
                     page_bitmap = int.from_bytes(page_header, 'big')
 
                     # iterate over slots in page
-                    pk = list(self.fields.keys())[self.pk_idx]
                     for slot in range(self.PAGE_SLOTS):
                         if not page_bitmap & (1 << slot):
                             continue
                         f.seek(self.FILE_HEADER_SIZE + page_number * self.page_size + self.PAGE_HEADER_SIZE + slot * self.entry_size)
                         entry_encoded = f.read(self.entry_size)
                         entry = self.decode(entry_encoded)
-                        if entry[pk] == key:
+                        if entry[pk] == search_key:
                             return entry, file_path, page_number, slot
         return None
 

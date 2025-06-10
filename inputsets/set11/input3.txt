@@ -1,0 +1,10 @@
+create record product Speaker 1005 120 Electronics
+create record product InvalidPrice abc 150 Electronics
+create record inventory 1001 50 WarehouseA
+create record inventory 1002 100 WarehouseA
+create record inventory 1003 25 WarehouseB
+create record inventory 1999 10 WarehouseC
+search record inventory 1001
+search record inventory 1999
+create record product
+delete record product 1999

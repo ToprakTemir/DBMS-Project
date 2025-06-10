@@ -1,0 +1,3 @@
+create type validtype11 20 1 f1 str f2 int f3 str f4 int f5 str f6 int f7 str f8 int f9 str f10 int f11 str f12 int f13 str f14 int f15 str f16 int f17 str f18 int f19 str f20 int
+create type validhouse 2 1 name str age int
+create type validhouse 2 1 leader str power int

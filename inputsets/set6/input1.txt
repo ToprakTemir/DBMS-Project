@@ -1,0 +1,2 @@
+create type abcdefghijklmnopqrstuvwxyz12345 2 1 name str age int
+create type abcdefghijklmnopqrstuvwxyz123 2 1 name str age int

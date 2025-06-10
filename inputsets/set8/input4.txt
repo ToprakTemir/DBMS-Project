@@ -1,0 +1,4 @@
+create record data 1001 value1001
+search record data 1
+search record data 1000
+search record data 1001

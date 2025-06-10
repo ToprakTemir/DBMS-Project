@@ -1,0 +1,12 @@
+1749547591, search record nonexistent_type somekey, failure
+1749547591, create type student 3 1 id int name str grade str, success
+1749547591, create record student 101 John A, success
+1749547591, search record student 999, failure
+1749547591, search record student 101, success
+1749547630, delete record nonexistent_type somekey, failure
+1749547630, delete record student 999, failure
+1749547630, create record student 102 Jane B, success
+1749547630, search record student 102, success
+1749547645, delete record student 101, success
+1749547645, search record student 101, failure
+1749547645, search record student 102, success

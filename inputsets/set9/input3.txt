@@ -1,0 +1,5 @@
+create record spicefield SouthDesert 1001 500
+create record spicefield NorthDesert 1002 750
+create record spicefield DeepDesert 1003 1000
+search record spicefield 1003
+search record spicefield 1001

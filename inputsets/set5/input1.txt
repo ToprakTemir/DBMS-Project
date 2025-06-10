@@ -1,0 +1,5 @@
+create type
+create type house
+create type house 3
+create type house 3 1
+create type house 3 1 name

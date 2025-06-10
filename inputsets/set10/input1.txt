@@ -1,0 +1,7 @@
+create type employee 5 1 empid int name str department str salary int active str
+create type department 3 1 deptname str manager str budget int
+create type project 4 2 name str projid int lead int deadline str
+create record department Engineering Alice 500000
+create record department Marketing Bob 300000
+create record department Finance Charlie 200000
+search record department Engineering

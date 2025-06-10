@@ -1,0 +1,11 @@
+create record employee 1005 Eve Marketing 62000 yes
+create record employee 1006 Frank Engineering 58000 no
+search record employee 1005
+search record employee 1006
+create type client 3 1 clientname str contact str revenue int
+create record client TechCorp John 150000
+create record client StartupXYZ Jane 75000
+search record client TechCorp
+delete record project MobileApp
+create record project NewMobile 2004 1005 2026-01-15
+search record project NewMobile

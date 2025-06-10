@@ -1,0 +1,34 @@
+1749549345, create type employee 5 1 empid int name str department str salary int active str, success
+1749549345, create type department 3 1 deptname str manager str budget int, success
+1749549345, create type project 4 2 name str projid int lead int deadline str, success
+1749549345, create record department Engineering Alice 500000, success
+1749549345, create record department Marketing Bob 300000, success
+1749549345, create record department Finance Charlie 200000, success
+1749549345, search record department Engineering, success
+1749549377, create record employee 1001 Alice Engineering 75000 yes, success
+1749549377, create record employee 1002 Bob Marketing 65000 yes, success
+1749549377, create record employee 1003 Charlie Finance 70000 yes, success
+1749549377, create record employee 1004 David Engineering 60000 yes, success
+1749549377, create record employee 1001 Eve Engineering 68000 yes, failure
+1749549377, search record employee 1001, success
+1749549377, search record employee 1004, success
+1749549377, search record employee 1005, failure
+1749549399, create record project WebApp 2001 1001 2025-12-31, success
+1749549399, create record project Database 2002 1003 2025-06-30, success
+1749549399, create record project MobileApp 2003 1004 2025-09-15, success
+1749549399, create record project InvalidProj 2001 1001 2025-08-01, failure
+1749549399, search record project WebApp, failure
+1749549399, search record project Database, failure
+1749549399, delete record employee 1002, success
+1749549399, search record employee 1002, failure
+1749549473, create record employee 1005 Eve Marketing 62000 yes, success
+1749549473, create record employee 1006 Frank Engineering 58000 no, success
+1749549473, search record employee 1005, success
+1749549473, search record employee 1006, success
+1749549473, create type client 3 1 clientname str contact str revenue int, success
+1749549473, create record client TechCorp John 150000, success
+1749549473, create record client StartupXYZ Jane 75000, success
+1749549473, search record client TechCorp, success
+1749549473, delete record project MobileApp, failure
+1749549473, create record project NewMobile 2004 1005 2026-01-15, success
+1749549473, search record project NewMobile, failure

@@ -1,0 +1,4 @@
+delete record house Harkonnen
+search record house Harkonnen
+create record house Corrino Kaitain Emperor 15000 10000 50
+search record house Corrino

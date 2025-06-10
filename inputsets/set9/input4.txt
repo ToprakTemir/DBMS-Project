@@ -1,0 +1,9 @@
+create record alliance Atreides Fremen 9
+create record alliance Harkonnen Sardaukar 7
+delete record house Harkonnen
+create record house Ordos Duke 6000 4000
+search record alliance Atreides
+search record house Ordos
+create record spicefield WestDesert 1004 600
+delete record alliance Harkonnen
+search record alliance Harkonnen

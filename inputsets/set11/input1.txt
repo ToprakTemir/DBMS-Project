@@ -1,0 +1,6 @@
+create type product 4 2 name str prodid int price int category str
+create type inventory 3 1 prodid int quantity int location str
+create type invalid_type 2 1 name# str value int
+create record product Laptop 1001 899 Electronics
+create record product Mouse 1002 25 Electronics
+create record product Desk 1003 299 Furniture

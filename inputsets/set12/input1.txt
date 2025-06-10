@@ -1,0 +1,283 @@
+create type university 4 1 name str ranking int students int location str
+create type student 6 2 name str studentid int age int major str gpa int university str
+create type professor 5 1 name str department str salary int courses int university str
+create type course 6 3 title str professor str courseid int credits int semester str enrollment int
+create type grade 4 1 studentid int courseid int grade str semester str
+create record university Harvard 1 21000 Cambridge
+create record university MIT 2 11000 Cambridge
+create record university Stanford 3 17000 PaloAlto
+create record university Berkeley 4 45000 Berkeley
+create record university Yale 5 13000 NewHaven
+search record university Harvard
+search record university MIT
+create record professor DrSmith ComputerScience 120000 4 Harvard
+create record professor DrJohnson Mathematics 110000 3 MIT
+create record professor DrWilliams Physics 115000 3 Stanford
+create record professor DrBrown Chemistry 105000 2 Berkeley
+create record professor DrDavis Biology 100000 3 Yale
+create record professor DrMiller Economics 95000 4 Harvard
+create record professor DrWilson Psychology 90000 2 MIT
+search record professor DrSmith
+search record professor DrJohnson
+create record student Alice 10001 20 ComputerScience 85 Harvard
+create record student Bob 10002 19 Mathematics 92 MIT
+create record student Charlie 10003 21 Physics 88 Stanford
+create record student Diana 10004 20 Chemistry 95 Berkeley
+create record student Eve 10005 19 Biology 91 Yale
+create record student Frank 10006 22 Economics 87 Harvard
+create record student Grace 10007 20 Psychology 89 MIT
+create record student Henry 10008 21 ComputerScience 84 Stanford
+create record student Ivy 10009 19 Mathematics 93 Berkeley
+create record student Jack 10010 20 Physics 86 Yale
+search record student 10001
+search record student 10005
+search record student 10010
+create record course IntroCS DrSmith 101 4 Fall2025 150
+create record course Calculus DrJohnson 201 4 Fall2025 120
+create record course Physics1 DrWilliams 301 3 Fall2025 100
+create record course Chemistry1 DrBrown 401 4 Fall2025 80
+create record course Biology1 DrDavis 501 3 Fall2025 90
+create record course Microeconomics DrMiller 601 3 Fall2025 200
+create record course CognitivePsych DrWilson 701 3 Fall2025 60
+search record course 101
+search record course 201
+search record course 701
+create record grade 10001 101 A Fall2025
+create record grade 10001 601 B Fall2025
+create record grade 10002 201 A Fall2025
+create record grade 10002 701 B Fall2025
+create record grade 10003 301 A Fall2025
+create record grade 10003 101 C Fall2025
+create record grade 10004 401 A Fall2025
+create record grade 10004 201 B Fall2025
+create record grade 10005 501 A Fall2025
+create record grade 10005 301 B Fall2025
+search record grade 10001
+search record grade 10003
+search record grade 10005
+create type research 5 1 projectid int title str lead str funding int duration str
+create record research 2001 AIInEducation DrSmith 500000 3years
+create record research 2002 QuantumComputing DrWilliams 750000 4years
+create record research 2003 GeneTherapy DrDavis 600000 5years
+create record research 2004 EconomicModels DrMiller 300000 2years
+search record research 2001
+search record research 2003
+create record student Kevin 10011 21 ComputerScience 90 Harvard
+create record student Linda 10012 20 Mathematics 94 MIT
+create record student Mike 10013 19 Physics 87 Stanford
+create record student Nancy 10014 22 Chemistry 96 Berkeley
+create record student Oscar 10015 20 Biology 88 Yale
+create record student Paula 10016 21 Economics 92 Harvard
+create record student Quinn 10017 19 Psychology 85 MIT
+create record student Rachel 10018 20 ComputerScience 91 Stanford
+create record student Steve 10019 21 Mathematics 89 Berkeley
+create record student Tina 10020 19 Physics 93 Yale
+search record student 10015
+search record student 10020
+create record course AdvancedCS DrSmith 102 4 Spring2026 100
+create record course Statistics DrJohnson 202 3 Spring2026 80
+create record course Physics2 DrWilliams 302 4 Spring2026 70
+create record course OrganicChem DrBrown 402 4 Spring2026 60
+create record course Genetics DrDavis 502 3 Spring2026 50
+search record course 102
+search record course 502
+delete record student 10003
+search record student 10003
+create record student NewCharlie 10021 20 Physics 88 Stanford
+search record student 10021
+create record grade 10011 102 A Spring2026
+create record grade 10012 202 B Spring2026
+create record grade 10013 302 A Spring2026
+create record grade 10014 402 A Spring2026
+create record grade 10015 502 B Spring2026
+search record grade 10011
+search record grade 10015
+create type department 4 1 name str head str budget int university str
+create record department ComputerScience DrSmith 2000000 Harvard
+create record department Mathematics DrJohnson 1500000 MIT
+create record department Physics DrWilliams 1800000 Stanford
+create record department Chemistry DrBrown 1200000 Berkeley
+create record department Biology DrDavis 1600000 Yale
+search record department ComputerScience
+search record department Biology
+create record student Uma 10022 22 ComputerScience 86 Harvard
+create record student Victor 10023 20 Mathematics 95 MIT
+create record student Wendy 10024 19 Physics 84 Stanford
+create record student Xavier 10025 21 Chemistry 97 Berkeley
+create record student Yara 10026 20 Biology 89 Yale
+create record student Zach 10027 19 Economics 91 Harvard
+search record student 10025
+search record student 10027
+create record course DatabaseSystems DrSmith 103 3 Fall2026 80
+create record course LinearAlgebra DrJohnson 203 4 Fall2026 100
+create record course QuantumMechanics DrWilliams 303 4 Fall2026 50
+create record course PhysicalChemistry DrBrown 403 3 Fall2026 40
+create record course Biochemistry DrDavis 503 4 Fall2026 60
+search record course 103
+search record course 303
+delete record professor DrWilson
+search record professor DrWilson
+create record professor DrNewWilson Psychology 92000 3 MIT
+search record professor DrNewWilson
+create record grade 10022 103 B Fall2026
+create record grade 10023 203 A Fall2026
+create record grade 10024 303 B Fall2026
+create record grade 10025 403 A Fall2026
+create record grade 10026 503 A Fall2026
+search record grade 10022
+search record grade 10026
+create type scholarship 4 1 name str amount int criteria str university str
+create record scholarship MeritScholarship 50000 HighGPA Harvard
+create record scholarship NeedBased 30000 LowIncome MIT
+create record scholarship ResearchGrant 25000 ResearchExcellence Stanford
+create record scholarship DiversityScholarship 40000 Underrepresented Berkeley
+create record scholarship AlumniScholarship 35000 AlumniConnection Yale
+search record scholarship MeritScholarship
+search record scholarship DiversityScholarship
+create record student Aaron 10028 21 ComputerScience 98 Harvard
+create record student Betty 10029 19 Mathematics 91 MIT
+create record student Carlos 10030 20 Physics 85 Stanford
+create record student Donna 10031 22 Chemistry 94 Berkeley
+create record student Eddie 10032 19 Biology 87 Yale
+create record student Fiona 10033 21 Economics 92 Harvard
+create record student George 10034 20 Psychology 88 MIT
+create record student Helen 10035 19 ComputerScience 96 Stanford
+search record student 10028
+search record student 10035
+delete record university Berkeley
+search record university Berkeley
+create record university NewBerkeley 6 42000 Berkeley
+search record university NewBerkeley
+create record course MachineLearning DrSmith 104 4 Spring2027 120
+create record course DifferentialEquations DrJohnson 204 3 Spring2027 90
+create record course AstroPhysics DrWilliams 304 4 Spring2027 60
+create record course AnalyticalChemistry DrBrown 404 3 Spring2027 50
+create record course MolecularBiology DrDavis 504 4 Spring2027 70
+search record course 104
+search record course 504
+create record grade 10028 104 A Spring2027
+create record grade 10029 204 B Spring2027
+create record grade 10030 304 A Spring2027
+create record grade 10031 404 A Spring2027
+create record grade 10032 504 B Spring2027
+search record grade 10028
+search record grade 10032
+create type library 4 1 name str books int digital int university str
+create record library WidenerLibrary 17000000 5000000 Harvard
+create record library TechLibrary 2500000 8000000 MIT
+create record library GreenLibrary 9000000 4000000 Stanford
+create record library MoffittLibrary 13000000 6000000 NewBerkeley
+create record library SterlingLibrary 15000000 3500000 Yale
+search record library WidenerLibrary
+search record library MoffittLibrary
+create record student Igor 10036 20 Mathematics 89 MIT
+create record student Julia 10037 21 Physics 93 Stanford
+create record student Keith 10038 19 Chemistry 86 NewBerkeley
+create record student Luna 10039 22 Biology 95 Yale
+create record student Mark 10040 20 Economics 90 Harvard
+search record student 10039
+search record student 10040
+delete record course 301
+search record course 301
+create record course NewPhysics1 DrWilliams 305 3 Fall2027 110
+search record course 305
+create record grade 10036 203 A Fall2027
+create record grade 10037 305 B Fall2027
+create record grade 10038 404 A Fall2027
+create record grade 10039 504 A Fall2027
+create record grade 10040 601 B Fall2027
+search record grade 10036
+search record grade 10040
+create type event 5 1 eventid int name str date str location str attendees int
+create record event 3001 TechConference 2025-10-15 Harvard 500
+create record event 3002 ScienceFair 2025-11-20 MIT 300
+create record event 3003 ResearchSymposium 2025-12-05 Stanford 250
+create record event 3004 ChemistryWorkshop 2026-01-10 NewBerkeley 150
+create record event 3005 BiologyLecture 2026-02-14 Yale 200
+search record event 3001
+search record event 3005
+create record student Nina 10041 19 ComputerScience 87 Harvard
+create record student Owen 10042 21 Mathematics 92 MIT
+create record student Penny 10043 20 Physics 84 Stanford
+create record student Rick 10044 22 Chemistry 98 NewBerkeley
+create record student Sarah 10045 19 Biology 91 Yale
+create record student Tom 10046 20 Economics 89 Harvard
+create record student Ursula 10047 21 Psychology 85 MIT
+create record student Vince 10048 19 ComputerScience 94 Stanford
+search record student 10044
+search record student 10048
+create record course WebDevelopment DrSmith 105 3 Summer2027 60
+create record course ProbabilityTheory DrJohnson 205 4 Summer2027 50
+create record course ParticlePhysics DrWilliams 306 4 Summer2027 40
+create record course InorganicChemistry DrBrown 405 3 Summer2027 45
+create record course CellBiology DrDavis 505 3 Summer2027 55
+search record course 105
+search record course 505
+delete record student 10020
+search record student 10020
+create record student NewTina 10049 20 Physics 93 Yale
+search record student 10049
+create record grade 10041 105 A Summer2027
+create record grade 10042 205 B Summer2027
+create record grade 10043 306 A Summer2027
+create record grade 10044 405 A Summer2027
+create record grade 10045 505 B Summer2027
+search record grade 10041
+search record grade 10045
+create type publication 5 1 pubid int title str author str journal str year int
+create record publication 4001 AIInQuantumComputing DrSmith NaturePhysics 2025
+create record publication 4002 MathematicalModeling DrJohnson JournalMath 2025
+create record publication 4003 QuantumEntanglement DrWilliams ScienceMagazine 2025
+create record publication 4004 ChemicalReactions DrBrown ChemistryToday 2025
+create record publication 4005 GeneticEngineering DrDavis NatureBiotechnology 2025
+search record publication 4001
+search record publication 4005
+create record student Walter 10050 21 Economics 88 Harvard
+search record student 10050
+delete record research 2004
+search record research 2004
+create record research 2006 BehavioralEconomics DrMiller 400000 3years
+search record research 2006
+create record grade 10046 601 A Summer2027
+create record grade 10047 701 B Summer2027
+create record grade 10048 105 A Summer2027
+create record grade 10049 306 B Summer2027
+create record grade 10050 601 A Summer2027
+search record grade 10046
+search record grade 10050
+create type facility 4 1 name str type str capacity int university str
+create record facility ScienceCenter Laboratory 200 Harvard
+create record facility ComputerLab Classroom 50 MIT
+create record facility Observatory Research 25 Stanford
+create record facility ChemLab Laboratory 80 NewBerkeley
+create record facility Greenhouse Research 100 Yale
+search record facility ScienceCenter
+search record facility Greenhouse
+delete record grade 10003
+search record grade 10003
+create record grade 10051 103 A Fall2027
+search record grade 10051
+create type invalid_type_name 2 1 field@ str value int
+create record nonexistent_type test value
+search record nonexistent_type key
+delete record nonexistent_type key
+create record student 10051 20 Physics
+create record student TooManyFields 10052 20 Physics 90 Stanford ExtraField
+search record student InvalidKey
+delete record student InvalidKey
+create type testtype 2 1 name str value abc
+create type validtype 0 1 name str
+create type validtype2 2 0 name str value int
+create type validtype3 2 3 name str value int
+search record university Harvard
+search record student 10001
+search record professor DrSmith
+search record course 101
+search record grade 10001
+search record research 2001
+search record department ComputerScience
+search record scholarship MeritScholarship
+search record library WidenerLibrary
+search record event 3001
+search record publication 4001
+search record facility ScienceCenter

@@ -1,0 +1,5 @@
+search record nonexistent_type somekey
+create type student 3 1 id int name str grade str
+create record student 101 John A
+search record student 999
+search record student 101

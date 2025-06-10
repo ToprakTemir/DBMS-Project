@@ -1,0 +1,5 @@
+create record house Atreides Duke 8000 5000
+create record house Harkonnen Baron 12000 3000
+create record house Corrino Emperor 15000 10000
+search record house Atreides
+search record house Harkonnen

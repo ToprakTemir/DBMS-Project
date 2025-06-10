@@ -1,0 +1,6 @@
+search record
+search house Atreides
+delete record
+delete house Atreides
+
+create type house 2 1 name str age int

@@ -1,0 +1,4 @@
+create type house2 3 1 name str age int city str extra_param
+create record house Bob 25 extra1 extra2
+search record house Bob extra
+delete record house Bob extra

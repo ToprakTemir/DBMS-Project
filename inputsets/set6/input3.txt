@@ -1,0 +1,2 @@
+create type maxfields 16 1 f1 str f2 int f3 str f4 int f5 str f6 int f7 str f8 int f9 str f10 int f11 str f12 int f13 str f14 int f15 str f16 int f17 int
+create record maxfields verylongstringthatisexactlytwohundred1characterslongabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr 123 short 456 medium 789 longerstring 101112 test 131415 data 161718 value 192021 final 222324

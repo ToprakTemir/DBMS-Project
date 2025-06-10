@@ -1,0 +1,2 @@
+1001 50 WarehouseA
+1999 10 WarehouseC

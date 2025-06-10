@@ -1,0 +1,4 @@
+create type validtype 2 0 name str age int
+create type validtype2 2 3 name str age int
+create type validtype3 2 -1 name str age int
+create type validtype4 0 1 name str

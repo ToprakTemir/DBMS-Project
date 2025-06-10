@@ -1,0 +1,17 @@
+1749546174, create type house 6 1 name str origin str leader str militarystrength int wealth int spiceproduction int, success
+1749546174, create type fremen 5 3 name str tribe str skilllevel int allegiance str age int, success
+1749546174, create type weapon 3 2 material str weaponid int damage int, success
+1749546207, create record house Atreides Caladan Duke 8000 5000 150, success
+1749546207, create record house Harkonnen GiediPrime Baron 12000 3000 200, success
+1749546207, create record fremen Stilgar SietchTabr 9 Atreides 45, success
+1749546207, create record fremen Chani SietchTabr 8 Atreides 25, success
+1749546207, create record weapon Crysknife 1001 85, success
+1749546207, create record weapon Lasgun 1002 120, success
+1749546235, search record house Atreides, success
+1749546235, search record fremen 9, success
+1749546235, search record weapon 1001, success
+1749546235, search record house Corrino, failure
+1749546315, delete record house Harkonnen, success
+1749546315, search record house Harkonnen, failure
+1749546315, create record house Corrino Kaitain Emperor 15000 10000 50, success
+1749546315, search record house Corrino, success

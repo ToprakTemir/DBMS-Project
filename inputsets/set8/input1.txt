@@ -1,0 +1,1 @@
+create type data 2 1 id int value str

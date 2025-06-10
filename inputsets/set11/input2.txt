@@ -1,0 +1,10 @@
+create record product Chair 1004 150 Furniture
+create record product Monitor 1005 300 Electronics
+create record product Keyboard 1006 75 Electronics
+create record product Lamp 1007 45 Furniture
+create record product Phone 1008 699 Electronics
+create record product Tablet 1009 499 Electronics
+create record product Headphones 1010 199 Electronics
+search record product 1001
+search record product 1005
+search record product 1010

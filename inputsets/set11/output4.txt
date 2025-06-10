@@ -1,0 +1,3 @@
+NewLamp 1011 55 Furniture
+5001 1001 2 2025-01-15
+1011 30 WarehouseA

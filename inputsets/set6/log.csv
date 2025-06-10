@@ -1,0 +1,13 @@
+1749548584, create type abcdefghijklmnopqrstuvwxyz12345 2 1 name str age int, failure
+1749548584, create type abcdefghijklmnopqrstuvwxyz123 2 1 name str age int, success
+1749548587, create type test1 2 1 abcdefghijklmnopqrstuvwxyzabcdefghijklmno str age int, failure
+1749548587, create type test2 2 1 abcdefghijklmnopqrstuvwxyzabcdefghijklm str age int, success
+1749548589, create type maxfields 16 1 f1 str f2 int f3 str f4 int f5 str f6 int f7 str f8 int f9 str f10 int f11 str f12 int f13 str f14 int f15 str f16 int f17 int, failure
+1749548589, create record maxfields verylongstringthatisexactlytwohundred1characterslongabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqr 123 short 456 medium 789 longerstring 101112 test 131415 data 161718 value 192021 final 222324, failure
+1749548593, create type numbers 3 2 name str id int value int, success
+1749548593, create record numbers negative -21474836488 21474836478, failure
+1749548593, create record numbers zero 0 0, success
+1749548593, create record numbers positive 21474836478 -21474836488, failure
+1749548593, search record numbers -21474836488, failure
+1749548593, search record numbers 0, success
+1749548593, search record numbers 21474836478, failure

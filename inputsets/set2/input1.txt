@@ -1,0 +1,5 @@
+create type 123 2 1 name str age int
+create type housewithverylongnameexceedingthirtycharacters 2 1 name str age int
+create type house_with_underscore 2 1 name str age int
+create type house@ 2 1 name str age int
+create type house! 2 1 name str age int

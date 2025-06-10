@@ -1,0 +1,8 @@
+create record project WebApp 2001 1001 2025-12-31
+create record project Database 2002 1003 2025-06-30
+create record project MobileApp 2003 1004 2025-09-15
+create record project InvalidProj 2001 1001 2025-08-01
+search record project WebApp
+search record project Database
+delete record employee 1002
+search record employee 1002

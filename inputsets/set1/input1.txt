@@ -1,0 +1,3 @@
+create type house 6 1 name str origin str leader str militarystrength int wealth int spiceproduction int
+create type fremen 5 3 name str tribe str skilllevel int allegiance str age int
+create type weapon 3 2 material str weaponid int damage int

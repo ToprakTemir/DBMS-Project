@@ -1,0 +1,3 @@
+create record nonexistent John Doe
+create type person 3 1 name str age int city str
+create record person Alice 25 NewYork

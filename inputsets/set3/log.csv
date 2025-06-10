@@ -1,0 +1,15 @@
+1749547429, create record nonexistent John Doe, failure
+1749547429, create type person 3 1 name str age int city str, success
+1749547429, create record person Alice 25 NewYork, success
+1749547462, create record person Alice 30 Boston, failure
+1749547462, create record person Bob 35 Chicago, success
+1749547462, search record person Alice, success
+1749547462, search record person Bob, success
+1749547481, create record person Charlie 40, failure
+1749547481, create record person David 45 Seattle ExtraField, failure
+1749547502, create record person Eve abc LosAngeles, failure
+1749547502, create record person Frank twentyfive Miami, failure
+1749547502, create type numbers 2 1 id int value int, success
+1749547502, create record numbers 101 200, success
+1749547502, create record numbers abc 300, failure
+1749547502, create record numbers 102 hello, failure

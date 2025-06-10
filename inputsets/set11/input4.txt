@@ -1,0 +1,13 @@
+delete record product 1007
+create record product NewLamp 1011 55 Furniture
+search record product 1007
+search record product 1011
+create type sales 4 1 saleid int prodid int quantity int date str
+create record sales 5001 1001 2 2025-01-15
+create record sales 5002 1002 5 2025-01-16
+create record sales 5003 1005 1 2025-01-17
+search record sales 5001
+search record sales 5004
+delete record inventory 1002
+create record inventory 1011 30 WarehouseA
+search record inventory 1011

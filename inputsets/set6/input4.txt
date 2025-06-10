@@ -1,0 +1,7 @@
+create type numbers 3 2 name str id int value int
+create record numbers negative -21474836488 21474836478
+create record numbers zero 0 0
+create record numbers positive 21474836478 -21474836488
+search record numbers -21474836488
+search record numbers 0
+search record numbers 21474836478

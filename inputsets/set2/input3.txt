@@ -1,0 +1,6 @@
+create type validtype5 2 1 123 str age int
+create type validtype6 2 1 namewithverylongfieldnameexceedingfortycharacters str age int
+create type validtype7 2 1 name@ str age int
+create type validtype8 2 1 name_with_underscore str age int
+create type validtype9 2 1 name str age float
+create type validtype10 2 1 name str name int

@@ -1,0 +1,6 @@
+create record house Atreides Caladan Duke 8000 5000 150
+create record house Harkonnen GiediPrime Baron 12000 3000 200
+create record fremen Stilgar SietchTabr 9 Atreides 45
+create record fremen Chani SietchTabr 8 Atreides 25
+create record weapon Crysknife 1001 85
+create record weapon Lasgun 1002 120

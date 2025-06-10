@@ -1,0 +1,39 @@
+1749549577, create type product 4 2 name str prodid int price int category str, success
+1749549577, create type inventory 3 1 prodid int quantity int location str, success
+1749549577, create type invalid_type 2 1 name# str value int, failure
+1749549577, create record product Laptop 1001 899 Electronics, success
+1749549577, create record product Mouse 1002 25 Electronics, success
+1749549577, create record product Desk 1003 299 Furniture, success
+1749549584, create record product Chair 1004 150 Furniture, success
+1749549584, create record product Monitor 1005 300 Electronics, success
+1749549584, create record product Keyboard 1006 75 Electronics, success
+1749549584, create record product Lamp 1007 45 Furniture, success
+1749549584, create record product Phone 1008 699 Electronics, success
+1749549584, create record product Tablet 1009 499 Electronics, success
+1749549584, create record product Headphones 1010 199 Electronics, success
+1749549584, search record product 1001, success
+1749549584, search record product 1005, success
+1749549584, search record product 1010, success
+1749549603, create record product Speaker 1005 120 Electronics, failure
+1749549603, create record product InvalidPrice abc 150 Electronics, failure
+1749549603, create record inventory 1001 50 WarehouseA, success
+1749549603, create record inventory 1002 100 WarehouseA, success
+1749549603, create record inventory 1003 25 WarehouseB, success
+1749549603, create record inventory 1999 10 WarehouseC, success
+1749549603, search record inventory 1001, success
+1749549603, search record inventory 1999, success
+1749549603, create record product, failure
+1749549603, delete record product 1999, failure
+1749549632, delete record product 1007, success
+1749549632, create record product NewLamp 1011 55 Furniture, success
+1749549632, search record product 1007, failure
+1749549632, search record product 1011, success
+1749549632, create type sales 4 1 saleid int prodid int quantity int date str, success
+1749549632, create record sales 5001 1001 2 2025-01-15, success
+1749549632, create record sales 5002 1002 5 2025-01-16, success
+1749549632, create record sales 5003 1005 1 2025-01-17, success
+1749549632, search record sales 5001, success
+1749549632, search record sales 5004, failure
+1749549632, delete record inventory 1002, success
+1749549632, create record inventory 1011 30 WarehouseA, success
+1749549632, search record inventory 1011, success

@@ -1,0 +1,18 @@
+1749547732, create type, failure
+1749547732, create type house, failure
+1749547732, create type house 3, failure
+1749547732, create type house 3 1, failure
+1749547732, create type house 3 1 name, failure
+1749547735, create record, failure
+1749547735, create record house, failure
+1749547735, create house 2 1 name str age int, failure
+1749547735, invalid_command house test, failure
+1749547739, search record, failure
+1749547739, search house Atreides, failure
+1749547739, delete record, failure
+1749547739, delete house Atreides, failure
+1749547739, create type house 2 1 name str age int, success
+1749547742, create type house2 3 1 name str age int city str extra_param, failure
+1749547742, create record house Bob 25 extra1 extra2, failure
+1749547742, search record house Bob extra, failure
+1749547742, delete record house Bob extra, failure

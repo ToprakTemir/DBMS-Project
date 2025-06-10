@@ -1,0 +1,2 @@
+create type test1 2 1 abcdefghijklmnopqrstuvwxyzabcdefghijklmno str age int
+create type test2 2 1 abcdefghijklmnopqrstuvwxyzabcdefghijklm str age int

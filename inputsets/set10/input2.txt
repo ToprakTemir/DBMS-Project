@@ -1,0 +1,8 @@
+create record employee 1001 Alice Engineering 75000 yes
+create record employee 1002 Bob Marketing 65000 yes
+create record employee 1003 Charlie Finance 70000 yes
+create record employee 1004 David Engineering 60000 yes
+create record employee 1001 Eve Engineering 68000 yes
+search record employee 1001
+search record employee 1004
+search record employee 1005

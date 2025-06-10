@@ -1,0 +1,3 @@
+Laptop 1001 899 Electronics
+Monitor 1005 300 Electronics
+Headphones 1010 199 Electronics

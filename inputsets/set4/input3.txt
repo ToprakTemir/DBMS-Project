@@ -1,0 +1,3 @@
+delete record student 101
+search record student 101
+search record student 102
