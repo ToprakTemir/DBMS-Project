@@ -78,6 +78,7 @@ class Table:
         save_catalog_entry(catalog_key, catalog_entry)
 
         file_path = os.path.join(DISK_PATH, f"{self.table_name}_1.bat")
+        open(file_path, 'wb')
 
 
     def add_record(self, field_values: Tuple[str|int]) -> None:
@@ -163,6 +164,7 @@ class Table:
         new_file_index = len(self.files) + 1
         new_file_name = f"{self.table_name}_{new_file_index}.bat"
         new_file_path = os.path.join(DISK_PATH, new_file_name)
+        open(new_file_path, 'wb')
 
         self.files.append(new_file_path)
         self.catalog_entry["file_count"] += 1
