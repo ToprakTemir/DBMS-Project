@@ -78,19 +78,6 @@ class Table:
         save_catalog_entry(catalog_key, catalog_entry)
 
         file_path = os.path.join(DISK_PATH, f"{self.table_name}_1.bat")
-        self.allocate_file(file_path)
-
-    def allocate_file(self, file_path: str) -> None:
-        """
-        Write a bytearray as large as the maximum file size to the file to avoid accessing unwritten space later.
-        :param file_path: The path to the file to be allocated.
-        :raises FileExistsError: If the file already exists.
-        """
-        if os.path.exists(file_path):
-            raise FileExistsError(f"File '{file_path}' already exists. Cannot allocate a new file with the same name.")
-        with open(file_path, 'wb') as f:
-            file_size = self.FILE_HEADER_SIZE + self.PAGES_PER_FILE * self.page_size
-            f.write(bytearray(file_size))  # Write a bytearray of size file_size
 
 
     def add_record(self, field_values: Tuple[str|int]) -> None:
@@ -176,7 +163,6 @@ class Table:
         new_file_index = len(self.files) + 1
         new_file_name = f"{self.table_name}_{new_file_index}.bat"
         new_file_path = os.path.join(DISK_PATH, new_file_name)
-        self.allocate_file(new_file_path)
 
         self.files.append(new_file_path)
         self.catalog_entry["file_count"] += 1
@@ -260,18 +246,19 @@ class Table:
                 raise ValueError(f"Unsupported field type '{field_type}'.")
         return record
 
-    def delete_record(self, pk_value: str) -> None:
+    def delete_record(self, pk_value: str) -> bool:
         """
         Delete a record from the table by primary key.
 
         :param pk_value: The primary key value identifying the record to delete.
+        :return True if the record was deleted successfully, False if no record with the given primary key exists.
         :raises KeyError: If no record with the given primary key exists.
         """
         pk_field_name = list(self.fields.keys())[self.pk_idx]
 
         search_result = self.search_record(pk_value)
         if search_result is None:
-            return # No record found with the given primary key, nothing to delete
+            return False# No record found with the given primary key, nothing to delete
         entry, file_path, page_number, slot_idx = search_result
 
         with open(file_path, 'r+b') as f:
@@ -299,3 +286,4 @@ class Table:
                 file_bitmap &= ~(1 << page_number)
                 f.seek(0)
                 f.write(file_bitmap.to_bytes(self.FILE_HEADER_SIZE, 'big'))
+        return True
