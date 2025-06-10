@@ -19,7 +19,7 @@ def process_command(input_line):
     """
     Parse a command line input and return the command and its arguments.
     """
-    log_command(input_line, LogStatus.BEGIN) # Log the command as incomplete
+    # log_command(input_line, LogStatus.BEGIN) # Log the command as incomplete
     input_line_list = input_line.strip().split()
     command_type = " ".join(input_line_list[:2]) # first two words define the command type
     args = input_line_list[2:] # remaining words are arguments
@@ -43,9 +43,10 @@ def process_command(input_line):
             fields_dict[fields[i]] = fields[i + 1]  # field name and type
             i += 2
 
+        Table(table_name, new_table_args=(field_count, pk_idx, fields_dict))
+        log_command(input_line, LogStatus.SUCCESS)
         try:
-            Table(table_name, new_table_args=(field_count, pk_idx, fields_dict))
-            log_command(input_line, LogStatus.SUCCESS)
+            pass
         except ValueError as e:
             print_stdout(f"Error: {e}")
             log_command(input_line, LogStatus.FAILURE)
@@ -86,8 +87,11 @@ def process_command(input_line):
             print_output(output_str)
 
     elif command_type == "delete record":
-        table.delete_record(args[1])
-        log_command(input_line, LogStatus.SUCCESS)
+        deletion_successful = table.delete_record(args[1])
+        if deletion_successful:
+            log_command(input_line, LogStatus.SUCCESS)
+        else:
+            log_command(input_line, LogStatus.FAILURE)
 
 
 
