@@ -136,6 +136,8 @@ class Table:
             f.seek(0)
             f.write(file_bitmap.to_bytes(self.FILE_HEADER_SIZE, 'big'))
 
+        save_catalog_entry(self.table_name, self.catalog_entry) # overwrite the catalog entry
+
 
     def search_unfilled_page(self) -> Tuple[str, int]:
         """
@@ -204,6 +206,7 @@ class Table:
                         entry = self.decode(entry_encoded)
                         if entry[pk] == key:
                             return entry, file_path, page_number, slot
+        return None
 
 
     def encode_record(self, field_values: Tuple[str|int]) -> bytes:
@@ -248,20 +251,17 @@ class Table:
                 raise ValueError(f"Unsupported field type '{field_type}'.")
         return record
 
-    def delete_record(self, pk_value: str) -> bool:
+    def delete_record(self, pk_value: str | int) -> bool:
         """
         Delete a record from the table by primary key.
 
         :param pk_value: The primary key value identifying the record to delete.
         :return True if the record was deleted successfully, False if no record with the given primary key exists.
-        :raises KeyError: If no record with the given primary key exists.
         """
-        pk_field_name = list(self.fields.keys())[self.pk_idx]
-
         search_result = self.search_record(pk_value)
         if search_result is None:
             return False# No record found with the given primary key, nothing to delete
-        entry, file_path, page_number, slot_idx = search_result
+        _, file_path, page_number, slot_idx = search_result
 
         with open(file_path, 'r+b') as f:
             # seek to the page header

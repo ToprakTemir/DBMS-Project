@@ -1,6 +1,6 @@
 import os
 from enum import Enum
-from .utils import LOG_DISK_PATH
+from .utils import PROJECT_ROOT
 import time
 
 class LogStatus(Enum):
@@ -19,11 +19,9 @@ def log_command(message: str, status: LogStatus) -> None:
     """
 
     message = message.strip()
-    log_file_path = os.path.join(LOG_DISK_PATH, 'log.csv')
+    log_file_path = os.path.join(PROJECT_ROOT, 'log.csv')
 
     # Ensure the log directory exists
-    if not os.path.exists(LOG_DISK_PATH):
-        os.makedirs(LOG_DISK_PATH)
     if not os.path.exists(log_file_path):
         f = open(log_file_path, 'w')
     else:
